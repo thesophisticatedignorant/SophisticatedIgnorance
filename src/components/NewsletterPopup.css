@@ -1,0 +1,83 @@
+.newsletter-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.newsletter-content {
+    position: relative;
+    background: #000;
+    border: 1px solid #fff;
+    max-width: 500px;
+    width: 90%;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+.newsletter-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 32px;
+    line-height: 24px;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.3s;
+    padding: 0;
+}
+
+.newsletter-close:hover {
+    opacity: 1;
+}
+
+.newsletter-close:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+}
+
+.newsletter-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #fff;
+    color: #fff;
+    width: 100%;
+    padding: 10px 0;
+    margin-bottom: 20px;
+    font-size: 14px;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.newsletter-input:focus {
+    outline: none;
+    border-bottom-color: #ccc;
+}
+
+.newsletter-submit {
+    background: #fff;
+    color: #000;
+    border: none;
+    padding: 12px 30px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    width: 100%;
+    font-family: inherit;
+    text-transform: uppercase;
+}
+
+.newsletter-submit:hover {
+    background: #e5e5e5;
+}
