@@ -245,7 +245,7 @@ const ComingSoon = ({ sectionTitle }) => {
     }, [])
 
     return (
-        <section className="coming-soon" data-scroll-section ref={containerRef}>
+        <section className="coming-soon" ref={containerRef}>
             <canvas ref={canvasRef} className="starfield-canvas"></canvas>
             <div className="coming-soon-overlay">
                 <h2 className="coming-soon-text" ref={textRef}>COMING SOON</h2>

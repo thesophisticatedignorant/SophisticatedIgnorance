@@ -18,6 +18,8 @@ function Shop() {
     const scrollRef = useRef(null)
     const locomotiveRef = useRef(null)
     const [menuOpen, setMenuOpen] = useState(false)
+    const [navOpen, setNavOpen] = useState(false)
+    const [activeSection, setActiveSection] = useState('foundations')
     const { isCartOpen } = useCart()
 
     // Section data with names, epithets, and products
@@ -27,7 +29,7 @@ function Shop() {
             epithet: 'the architecture of self',
             num: '01',
             image: '/foundations.svg',
-            body: 'Foundations serves as the base layer of refinement: the stepping stones of your wardrobe, designed for structure, comfort, and everyday uniformity. Through simplicity and precision, Foundations defines the essentials that ground identity — where form takes shape and sophistication begins.',
+            body: 'FOUNDATIONS SERVES AS THE BASE LAYER OF REFINEMENT; THE STEPPING STONES OF YOUR WARDROBE DESIGNED FOR STRUCTURE, COMFORT AND EVERYDAY UNIFORMITY. THROUGH SIMPLICITY AND PRECISION, FOUNDATIONS DEFINES THE ESSENTIALS. WHERE FORM TAKES SHAPE AND SOPHISTICATION BEGINS.',
             products: [
                 {
                     name: 'The Veil',
@@ -68,13 +70,22 @@ function Shop() {
                     epithet: 'Transformation in motion.',
                     price: '150',
                     colors: ['Grapefruit', 'Amethyst', 'Graphite'],
-                    sizes: [
-                        { size: 'S', soldOut: false },
-                        { size: 'M', soldOut: false },
-                        { size: 'L', soldOut: false },
-                        { size: 'XL', soldOut: false },
-                        { size: 'XXL', soldOut: false }
-                    ],
+                    breakawaySizing: {
+                        hoodieSizes: [
+                            { size: 'S', soldOut: false },
+                            { size: 'M', soldOut: false },
+                            { size: 'L', soldOut: false },
+                            { size: 'XL', soldOut: false },
+                            { size: 'XXL', soldOut: false }
+                        ],
+                        pantsSizes: [
+                            { size: 'S', soldOut: false },
+                            { size: 'M', soldOut: false },
+                            { size: 'L', soldOut: false },
+                            { size: 'XL', soldOut: false },
+                            { size: 'XXL', soldOut: false }
+                        ]
+                    },
                     specsColumns: [
                         {
                             header: 'Hoodie',
@@ -109,13 +120,29 @@ function Shop() {
             epithet: 'the shield of style',
             num: '02',
             image: '/fortifications.svg',
-            body: 'Fortifications represents defense through design — luxurious garments built as armor. Each piece in this tier acts as both protection and proclamation — constructed to endure, engineered to impress.',
+            body: 'FORTIFICATIONS REPRESENTS DEFENSE THROUGH DESIGN; LUXURIOUS GARMENTS BUILT AS ARMOR. EACH PIECE IN THIS TIER ACTS AS BOTH PROTECTION AND PROCLAMATION. CONSTRUCTED TO ENDURE, ENGINEERED TO IMPRESS.',
             products: [
                 {
                     name: 'The Contradiction',
                     epithet: 'Elegance built on chaos.',
                     price: '420',
-                    colors: ['Black', 'White', 'Red'],
+                    images: [
+                        '/contradiction_exterior_interactive_360_viewer_complete.html',
+                        '/contradiction_reversed_interactive_360_viewer_complete.html',
+                        '/contradiction-ghost-mannequin/img_1.png',
+                        '/contradiction-ghost-mannequin/img_2.png',
+                        '/contradiction-ghost-mannequin/img_3.png',
+                        '/contradiction-ghost-mannequin/img_4.png',
+                        '/contradiction-ghost-mannequin/img_5.png',
+                        '/contradiction-ghost-mannequin/img_6.png',
+                        '/contradiction-rev-ghost-mannequin/img_1.png',
+                        '/contradiction-rev-ghost-mannequin/img_2.png',
+                        '/contradiction-rev-ghost-mannequin/img_3.png',
+                        '/contradiction-rev-ghost-mannequin/img_4.png',
+                        '/contradiction-rev-ghost-mannequin/img_5.png',
+                        '/contradiction-rev-ghost-mannequin/img_6.png'
+                    ],
+                    colors: ['Multi'],
                     sizes: [
                         { size: 'S', soldOut: false },
                         { size: 'M', soldOut: false },
@@ -152,7 +179,7 @@ function Shop() {
                     name: 'The Intersect',
                     epithet: 'The worlds of asphalt and agility collide.',
                     price: '670',
-                    colors: ['Ivory'],
+                    colors: ['Multi'],
                     sizes: [
                         { size: 'S', soldOut: false },
                         { size: 'M', soldOut: false },
@@ -188,7 +215,7 @@ function Shop() {
             epithet: 'the creed of craft',
             num: '03',
             image: '/relics.svg',
-            body: 'Relics serve as the tactile memory of the brand: timeless leather goods that embody strength through subtlety and refinement through utility. Each piece is designed to be carried, aged, and remembered.',
+            body: 'RELICS SERVE AS TIMELESS LEATHER GOODS THAT EMBODY STRENGTH THROUGH SUBTLETY AND REFINEMENT THROUGH UTILITY. EACH PIECE IS DESIGNED TO BE CARRIED, AGED, AND REMEMBERED.',
             products: [
                 {
                     name: 'The Creed',
@@ -225,7 +252,7 @@ function Shop() {
             epithet: 'the path of conquest',
             num: '04',
             image: '/dominion.svg',
-            body: 'Dominion represents progression through motion — the pursuit of power made physical. Footwear engineered for elevation, designed to command every step. Each piece in this tier symbolizes forward momentum.',
+            body: <>DOMINION REPRESENTS PROGRESSION THROUGH MOTION. <span className="redacted-text">FOOTWEAR</span> ENGINEERED FOR ELEVATION, <span className="redacted-text">DESIGNED TO COMMAND EVERY STEP</span>. EACH PIECE IN THIS TIER SYMBOLIZES FORWARD MOMENTUM.</>,
             comingSoon: true,
             products: []
         },
@@ -234,7 +261,7 @@ function Shop() {
             epithet: 'the reign of detail',
             num: '05',
             image: '/adornments.svg',
-            body: 'Adornments embodies refinement through subtlety — accessories that command attention without excess. Each piece in this tier celebrates intention — where the details evoke dominance.',
+            body: <>ADORNMENTS EMBODIES REFINEMENT THROUGH SUBTLETY. <span className="redacted-text">ACCESSORIES THAT</span> COMMAND ATTENTION WITHOUT EXCESS. EACH PIECE IN THIS TIER CELEBRATES INTENTION. WHERE THE DETAILS EVOKE DOMINANCE.</>,
             comingSoon: true,
             products: []
         },
@@ -243,7 +270,7 @@ function Shop() {
             epithet: 'the pinnacle of refinement',
             num: '06',
             image: '/crownworks.svg',
-            body: 'Crownworks represents the embodiment of power perfected in presentation: garments crafted for moments of command, ceremony, and consequence. Each creation in this tier signifies composure under pressure — the discipline to remain regal, the elegance to move with authority.',
+            body: 'CROWNWORKS REPRESENTS THE EMBODIMENT OF POWER PERFECTED IN PRESENTATION: GARMENTS CRAFTED FOR MOMENTS OF COMMAND, CEREMONY, AND CONSEQUENCE. EACH CREATION IN THIS TIER SIGNIFIES COMPOSURE UNDER PRESSURE; THE DISCIPLINE TO REMAIN REGAL, THE ELEGANCE TO MOVE WITH AUTHORITY.',
             products: [
                 {
                     name: 'The Heir',
@@ -399,9 +426,64 @@ function Shop() {
         ScrollTrigger.addEventListener('refresh', () => scroll.update())
         ScrollTrigger.refresh()
 
+        let resizeTimeout;
+        const resizeObserver = new ResizeObserver(() => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                if (scroll) scroll.update()
+            }, 150);
+        })
+        resizeObserver.observe(document.body)
+        if (el) {
+            resizeObserver.observe(el)
+            const wrappers = el.querySelectorAll('.category-wrapper, .house-of-crowns-section')
+            wrappers.forEach(w => resizeObserver.observe(w))
+        }
+
+        // Ensure Locomotive Scroll recalculates heights when images and iframes load to prevent overlapping sections
+        const images = el.querySelectorAll('img');
+        images.forEach((img) => {
+            if (img.complete) {
+                if (scroll) scroll.update()
+            }
+            img.addEventListener('load', () => {
+                if (scroll) scroll.update()
+            });
+        });
+
+        const iframes = el.querySelectorAll('iframe');
+        iframes.forEach((iframe) => {
+            iframe.addEventListener('load', () => {
+                if (scroll) scroll.update()
+            });
+        });
+
+        // Intercept pinch-to-zoom (ctrlKey + wheel) to prevent Locomotive Scroll from massive jumps
+        const handleWheel = (e) => {
+            if (e.ctrlKey) {
+                e.stopImmediatePropagation()
+            }
+        }
+        window.addEventListener('wheel', handleWheel, { passive: false })
+
+        // Intersection Observer for Active Section
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    setActiveSection(entry.target.id)
+                }
+            })
+        }, { threshold: 0.3 })
+
+        const sectionElements = document.querySelectorAll('.category-wrapper section.hero')
+        sectionElements.forEach(el => observer.observe(el))
+
         return () => {
+            resizeObserver.disconnect()
+            window.removeEventListener('wheel', handleWheel)
             if (scroll) scroll.destroy()
             ScrollTrigger.getAll().forEach(t => t.kill())
+            observer.disconnect()
         }
     }, [])
 
@@ -422,24 +504,67 @@ function Shop() {
     return (
         <div className="shop-page">
             <CartDrawer />
-            <div data-scroll-container ref={scrollRef} className="main-container">
-                <Header onMenuClick={toggleMenu} />
-                <MenuOverlay
-                    isOpen={menuOpen}
-                    onClose={toggleMenu}
-                    scrollToSection={(id) => {
-                        const target = document.getElementById(id)
-                        if (target && locomotiveRef.current) {
-                            locomotiveRef.current.scrollTo(target)
-                        }
-                    }}
-                />
+            
+            {/* Left Navigation Bar */}
+            <nav 
+                className={`shop-left-nav ${navOpen ? 'nav-open' : ''}`}
+                onMouseEnter={() => window.innerWidth > 768 && setNavOpen(true)}
+                onMouseLeave={() => window.innerWidth > 768 && setNavOpen(false)}
+                onClick={() => {
+                    if (window.innerWidth <= 768 && !navOpen) {
+                        setNavOpen(true)
+                    }
+                }}
+            >
+                <ul>
+                    {sections.map((s, idx) => {
+                        const id = s.title.toLowerCase()
+                        return (
+                            <li 
+                                key={idx} 
+                                className={activeSection === id ? 'active' : ''}
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    if (window.innerWidth <= 768 && !navOpen) {
+                                        return;
+                                    }
+                                    e.stopPropagation()
+                                    const target = document.getElementById(id)
+                                    if (target && locomotiveRef.current) {
+                                        locomotiveRef.current.scrollTo(target)
+                                        if (window.innerWidth <= 768) setNavOpen(false)
+                                    }
+                                }}
+                                style={{ cursor: 'pointer' }}
+                            >
+                                <a href={`#${id}`}>
+                                    {s.title}
+                                </a>
+                            </li>
+                        )
+                    })}
+                </ul>
+            </nav>
 
-                {/* Render each section with Hero + Products */}
-                {sections.map((section, sectionIndex) => (
+            <Header onMenuClick={toggleMenu} />
+            <MenuOverlay
+                isOpen={menuOpen}
+                onClose={toggleMenu}
+                scrollToSection={(id) => {
+                    const target = document.getElementById(id)
+                    if (target && locomotiveRef.current) {
+                        locomotiveRef.current.scrollTo(target)
+                    }
+                }}
+            />
+
+            <div data-scroll-container ref={scrollRef} className="main-container">
+                <div data-scroll-section>
+                    {/* Render each section with Hero + Products */}
+                    {sections.map((section, sectionIndex) => (
                     <div key={sectionIndex} className="category-wrapper">
                         {/* Hero Section */}
-                        <section id={section.title.toLowerCase()} className={`section hero tier-${section.title.toLowerCase()}`} data-scroll-section>
+                        <section id={section.title.toLowerCase()} className={`section hero tier-${section.title.toLowerCase()}`}>
                             <h1 data-scroll data-scroll-speed="2">{section.title}</h1>
                             <p data-scroll data-scroll-speed="1">{section.epithet}</p>
                             <img
@@ -469,6 +594,7 @@ function Shop() {
                                         num: section.num,
                                         price: product.price,
                                         image: section.image,
+                                        images: product.images,
                                         colors: product.colors,
                                         sizes: product.sizes,
                                         specs: product.specs,
@@ -485,6 +611,7 @@ function Shop() {
 
                 {/* House of Crowns Link */}
                 <HouseOfCrowns number="07" />
+                </div>
 
                 <footer className="footer" data-scroll-section>
                     <p>© 2025 SOPHISTICATED IGNORANCE</p>

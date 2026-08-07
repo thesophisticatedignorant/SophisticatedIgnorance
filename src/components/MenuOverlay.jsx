@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { db } from '../firebase'
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import './MenuOverlay.css'
 
 function MenuOverlay({ isOpen, onClose, scrollToSection }) {
     const navigate = useNavigate()
     const location = useLocation()
     const [shopOpen, setShopOpen] = useState(false)
+    const [email, setEmail] = useState('')
 
     const shopItems = [
         'FOUNDATIONS',
@@ -45,6 +48,23 @@ function MenuOverlay({ isOpen, onClose, scrollToSection }) {
             navigate(`/shop#${sectionId}`)
         }
         onClose()
+    }
+
+    const handleNewsletterSubmit = async (e) => {
+        e.preventDefault()
+        if (!email) return
+        
+        try {
+            await addDoc(collection(db, 'newsletter_subscriptions'), {
+                email,
+                timestamp: serverTimestamp()
+            })
+            alert('Successfully subscribed to the CIRE newsletter!')
+            setEmail('')
+        } catch (error) {
+            console.error('Error adding document: ', error)
+            alert('There was an error. Make sure Firebase config is set up.')
+        }
     }
 
     return (
@@ -101,7 +121,7 @@ function MenuOverlay({ isOpen, onClose, scrollToSection }) {
                 <div className="menu-connect">
                     <span className="menu-label">CONNECT</span>
                     <div className="menu-social-icons">
-                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="Instagram">
+                        <a href="https://www.instagram.com/cireconglomerate" target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="Instagram">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                                 <circle cx="12" cy="12" r="4" />
@@ -140,10 +160,16 @@ function MenuOverlay({ isOpen, onClose, scrollToSection }) {
             {/* Newsletter Section - Fixed at bottom */}
             <div className="menu-newsletter">
                 <p className="newsletter-label">NEWSLETTER</p>
-                <div className="newsletter-form">
-                    <input type="email" placeholder="Enter your email" className="newsletter-field" />
-                    <button className="newsletter-btn">→</button>
-                </div>
+                <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
+                    <input 
+                        type="email" 
+                        placeholder="Enter your email" 
+                        className="newsletter-field" 
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <button type="submit" className="newsletter-btn">→</button>
+                </form>
             </div>
         </div>
     )

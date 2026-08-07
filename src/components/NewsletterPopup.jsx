@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react'
 import './NewsletterPopup.css'
+import { db } from '../firebase'
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 
 function NewsletterPopup({ onClose }) {
     const [closeEnabled, setCloseEnabled] = useState(false)
+    const [email, setEmail] = useState('')
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -11,10 +14,21 @@ function NewsletterPopup({ onClose }) {
         return () => clearTimeout(timer)
     }, [])
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        alert('Thank you for subscribing to our newsletter! You will receive a 10% discount code shortly.')
-        if (onClose) onClose()
+        if (!email) return
+        
+        try {
+            await addDoc(collection(db, 'newsletter_subscriptions'), {
+                email,
+                timestamp: serverTimestamp()
+            })
+            alert('Thank you for subscribing to our newsletter! You will receive a 10% discount code shortly.')
+            if (onClose) onClose()
+        } catch (error) {
+            console.error('Error adding document: ', error)
+            alert('There was an error. Make sure Firebase config is set up.')
+        }
     }
 
     const handleClose = () => {
@@ -44,9 +58,11 @@ function NewsletterPopup({ onClose }) {
                 <form onSubmit={handleSubmit} style={{ marginBottom: '16px' }}>
                     <input
                         type="email"
-                        placeholder="Your email"
-                        className="newsletter-input"
+                        placeholder="Enter email..."
                         required
+                        className="newsletter-input"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                     />
                     <button type="submit" className="newsletter-submit">
                         SUBSCRIBE

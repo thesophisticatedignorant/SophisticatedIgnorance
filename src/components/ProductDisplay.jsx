@@ -3,6 +3,40 @@ import gsap from 'gsap'
 import { useCart } from '../context/CartContext'
 import './ProductDisplay.scss'
 
+const Dropdown = ({ label, options, selected, onSelect, renderOption, disabledOption }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    return (
+        <div className="custom-dropdown" tabIndex="0" onBlur={() => setIsOpen(false)}>
+            <div className="dropdown-header" onClick={() => setIsOpen(!isOpen)}>
+                <span className="dropdown-label">{label}: </span>
+                <span className="dropdown-selected">{renderOption ? renderOption(selected) : selected}</span>
+                <span className="dropdown-arrow" style={{ transform: isOpen ? 'rotate(180deg)' : 'none' }}>▼</span>
+            </div>
+            {isOpen && (
+                <div className="dropdown-menu">
+                    {options.map((opt, i) => {
+                        const isDisabled = disabledOption ? disabledOption(opt) : false;
+                        return (
+                            <div 
+                                key={i} 
+                                className={`dropdown-item ${isDisabled ? 'disabled' : ''} ${selected === opt ? 'active' : ''}`} 
+                                onClick={() => {
+                                    if (!isDisabled) {
+                                        onSelect(opt);
+                                        setIsOpen(false);
+                                    }
+                                }}
+                            >
+                                {renderOption ? renderOption(opt) : opt}
+                            </div>
+                        )
+                    })}
+                </div>
+            )}
+        </div>
+    );
+};
+
 function ProductDisplay({ product, sectionLogo, reversed = false }) {
     const sectionRef = useRef(null)
     const imageRef = useRef(null)
@@ -37,6 +71,7 @@ function ProductDisplay({ product, sectionLogo, reversed = false }) {
     const sizes = product.sizes || defaultSizes
     const specs = product.specs || defaultSpecs
     const colors = product.colors || defaultColors
+    const isStatesman = product.title === 'The Statesman' || product.id === 'dominion'
 
     const [selectedSize, setSelectedSize] = useState(
         sizes.find(s => !s.soldOut)?.size || 'M'
@@ -50,6 +85,8 @@ function ProductDisplay({ product, sectionLogo, reversed = false }) {
     const [selectedVestSize, setSelectedVestSize] = useState('M')
     const [quantity, setQuantity] = useState(1)
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
+
+    const images = product.images || [product.image || "/placeholder.svg", "/placeholder.svg", "/placeholder.svg"]
 
     // GSAP Scroll-triggered animations using Intersection Observer
     useEffect(() => {
@@ -108,22 +145,35 @@ function ProductDisplay({ product, sectionLogo, reversed = false }) {
     }, [reversed, hasAnimated])
 
     const handlePrev = () => {
-        console.log('Prev image')
+        setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))
     }
 
     const handleNext = () => {
-        console.log('Next image')
+        setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1))
     }
 
     return (
-        <div className="product-display-section" data-scroll-section ref={sectionRef}>
+        <div className="product-display-section" ref={sectionRef}>
             <div className={`product-container ${reversed ? 'reversed' : ''}`}>
                 {/* Left Side - Image Carousel */}
                 <div className="product-visual" ref={imageRef}>
                     <div className="carousel-container">
                         <button className="carousel-nav prev" onClick={handlePrev}>←</button>
                         <div className="product-image-wrapper">
-                            <img src={product.image || "/placeholder.svg"} alt={product.title} className="product-image" />
+                            {/* Placeholder div if we don't have real images yet */}
+                            <div className="placeholder-image-bg">
+                                {images[currentImageIndex].endsWith('.html') ? (
+                                    <iframe 
+                                        src={images[currentImageIndex]} 
+                                        title={`${product.title} 360 Viewer`}
+                                        className="product-image iframe-viewer"
+                                        style={{ border: 'none', width: '100%', height: '100%', pointerEvents: 'auto' }}
+                                        scrolling="no"
+                                    />
+                                ) : (
+                                    <img src={images[currentImageIndex]} alt={product.title} className="product-image" />
+                                )}
+                            </div>
                             {sectionLogo && (
                                 <img
                                     src={sectionLogo}
@@ -133,6 +183,17 @@ function ProductDisplay({ product, sectionLogo, reversed = false }) {
                             )}
                         </div>
                         <button className="carousel-nav next" onClick={handleNext}>→</button>
+                        
+                        {/* Bottom center navigation dots */}
+                        <div className="carousel-dots">
+                            {images.map((_, idx) => (
+                                <div 
+                                    key={idx} 
+                                    className={`dot ${idx === currentImageIndex ? 'active' : ''}`} 
+                                    onClick={() => setCurrentImageIndex(idx)}
+                                ></div>
+                            ))}
+                        </div>
                     </div>
                 </div>
 
@@ -153,152 +214,108 @@ function ProductDisplay({ product, sectionLogo, reversed = false }) {
                         {/* Suit Sizing with multiple categories */}
                         {product.suitSizing ? (
                             <div className="suit-sizing">
-                                {/* Color - spans full width */}
-                                <div className="size-category full-width">
-                                    <span className="category-label"><strong>Color</strong></span>
-                                    <div className="size-row">
-                                        {colors.map((color, index) => (
-                                            <button
-                                                key={index}
-                                                className={`size-btn ${selectedColor === color ? 'active' : ''}`}
-                                                onClick={() => setSelectedColor(color)}
-                                            >
-                                                {color}
-                                            </button>
-                                        ))}
+                                {isStatesman ? (
+                                    <div className="full-width color-dropdown-wrapper">
+                                        <Dropdown 
+                                            label="Color" 
+                                            options={colors} 
+                                            selected={selectedColor} 
+                                            onSelect={setSelectedColor} 
+                                        />
                                     </div>
-                                </div>
-
-                                {/* Fit - Body fit style */}
-                                <div className="size-category">
-                                    <span className="category-label"><strong>Fit</strong></span>
-                                    <div className="size-row">
-                                        {product.suitSizing.fits.map((fit, index) => (
-                                            <button
-                                                key={index}
-                                                className={`size-btn ${selectedFit === fit ? 'active' : ''}`}
-                                                onClick={() => setSelectedFit(fit)}
-                                            >
-                                                {fit}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {/* Jacket Fit - Length fit */}
-                                <div className="size-category">
-                                    <span className="category-label"><strong>Jacket Fit</strong></span>
-                                    <div className="size-row">
-                                        {product.suitSizing.jacketFits.map((fit, index) => (
-                                            <button
-                                                key={index}
-                                                className={`size-btn ${selectedJacketFit === fit ? 'active' : ''}`}
-                                                onClick={() => setSelectedJacketFit(fit)}
-                                            >
-                                                {fit}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {/* Jacket Size */}
-                                <div className="size-category">
-                                    <span className="category-label"><strong>Jacket Size</strong></span>
-                                    <div className="size-row">
-                                        {product.suitSizing.jacketSizes.map((size, index) => (
-                                            <button
-                                                key={index}
-                                                className={`size-btn ${selectedJacketSize === size ? 'active' : ''}`}
-                                                onClick={() => setSelectedJacketSize(size)}
-                                            >
-                                                {size}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {/* Vest Size - only if product has vest */}
-                                {product.suitSizing.vestSizes && (
-                                    <div className="size-category">
-                                        <span className="category-label"><strong>Vest Size</strong></span>
-                                        <div className="size-row">
-                                            {product.suitSizing.vestSizes.map((size, index) => (
-                                                <button
-                                                    key={index}
-                                                    className={`size-btn ${selectedVestSize === size ? 'active' : ''}`}
-                                                    onClick={() => setSelectedVestSize(size)}
-                                                >
-                                                    {size}
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
+                                ) : (
+                                    <Dropdown 
+                                        label="Color" 
+                                        options={colors} 
+                                        selected={selectedColor} 
+                                        onSelect={setSelectedColor} 
+                                    />
                                 )}
-
-                                {/* Pant Waist */}
-                                <div className="size-category">
-                                    <span className="category-label"><strong>Pant Waist</strong></span>
-                                    <div className="size-row">
-                                        {product.suitSizing.pantWaist.map((size, index) => (
-                                            <button
-                                                key={index}
-                                                className={`size-btn ${selectedPantWaist === size ? 'active' : ''}`}
-                                                onClick={() => setSelectedPantWaist(size)}
-                                            >
-                                                {size}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {/* Pant Length */}
-                                <div className="size-category">
-                                    <span className="category-label"><strong>Pant Length</strong></span>
-                                    <div className="size-row">
-                                        {product.suitSizing.pantLength.map((size, index) => (
-                                            <button
-                                                key={index}
-                                                className={`size-btn ${selectedPantLength === size ? 'active' : ''}`}
-                                                onClick={() => setSelectedPantLength(size)}
-                                            >
-                                                {size}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
+                                <Dropdown 
+                                    label="Fit" 
+                                    options={product.suitSizing.fits} 
+                                    selected={selectedFit} 
+                                    onSelect={setSelectedFit} 
+                                />
+                                <Dropdown 
+                                    label="Jacket Fit" 
+                                    options={product.suitSizing.jacketFits} 
+                                    selected={selectedJacketFit} 
+                                    onSelect={setSelectedJacketFit} 
+                                />
+                                <Dropdown 
+                                    label="Jacket Size" 
+                                    options={product.suitSizing.jacketSizes} 
+                                    selected={selectedJacketSize} 
+                                    onSelect={setSelectedJacketSize} 
+                                />
+                                {product.suitSizing.vestSizes && (
+                                    <Dropdown 
+                                        label="Vest Size" 
+                                        options={product.suitSizing.vestSizes} 
+                                        selected={selectedVestSize} 
+                                        onSelect={setSelectedVestSize} 
+                                    />
+                                )}
+                                <Dropdown 
+                                    label="Pant Waist" 
+                                    options={product.suitSizing.pantWaist} 
+                                    selected={selectedPantWaist} 
+                                    onSelect={setSelectedPantWaist} 
+                                />
+                                <Dropdown 
+                                    label="Pant Length" 
+                                    options={product.suitSizing.pantLength} 
+                                    selected={selectedPantLength} 
+                                    onSelect={setSelectedPantLength} 
+                                />
                             </div>
                         ) : (
                             <div className="non-suit-options">
-                                {/* Color for non-suit products */}
-                                <div className="size-category">
-                                    <span className="category-label"><strong>Color</strong></span>
-                                    <div className="size-row">
-                                        {colors.map((color, index) => (
-                                            <button
-                                                key={index}
-                                                className={`size-btn ${selectedColor === color ? 'active' : ''}`}
-                                                onClick={() => setSelectedColor(color)}
-                                            >
-                                                {color}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                                <div className="size-category">
-                                    <span className="category-label"><strong>Size</strong></span>
-                                    <div className="size-row">
-                                        {sizes.map((sizeObj, index) => (
-                                            <button
-                                                key={index}
-                                                className={`size-btn ${selectedSize === sizeObj.size ? 'active' : ''} ${sizeObj.soldOut ? 'sold-out' : ''}`}
-                                                onClick={() => !sizeObj.soldOut && setSelectedSize(sizeObj.size)}
-                                                disabled={sizeObj.soldOut}
-                                            >
-                                                {sizeObj.soldOut ? <s>{sizeObj.size}</s> : sizeObj.size}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
+                                {colors.length > 1 ? (
+                                    <Dropdown 
+                                        label="Color" 
+                                        options={colors} 
+                                        selected={selectedColor} 
+                                        onSelect={setSelectedColor} 
+                                    />
+                                ) : (
+                                    <div className="single-option"><span className="label">Color:</span> {colors[0]}</div>
+                                )}
+                                
+                                {product.breakawaySizing ? (
+                                    <>
+                                        <Dropdown 
+                                            label="Hoodie Size" 
+                                            options={product.breakawaySizing.hoodieSizes} 
+                                            selected={product.breakawaySizing.hoodieSizes.find(s => s.size === selectedSize) || product.breakawaySizing.hoodieSizes[0]} 
+                                            onSelect={(opt) => setSelectedSize(opt.size)} 
+                                            renderOption={(opt) => opt.size}
+                                            disabledOption={(opt) => opt.soldOut}
+                                        />
+                                        <Dropdown 
+                                            label="Pants Size" 
+                                            options={product.breakawaySizing.pantsSizes} 
+                                            selected={product.breakawaySizing.pantsSizes.find(s => s.size === selectedPantWaist) || product.breakawaySizing.pantsSizes[0]} 
+                                            onSelect={(opt) => setSelectedPantWaist(opt.size)} 
+                                            renderOption={(opt) => opt.size}
+                                            disabledOption={(opt) => opt.soldOut}
+                                        />
+                                    </>
+                                ) : (
+                                    sizes.length > 1 ? (
+                                        <Dropdown 
+                                            label="Size" 
+                                            options={sizes} 
+                                            selected={sizes.find(s => s.size === selectedSize) || sizes[0]} 
+                                            onSelect={(opt) => setSelectedSize(opt.size)} 
+                                            renderOption={(opt) => opt.size}
+                                            disabledOption={(opt) => opt.soldOut}
+                                        />
+                                    ) : (
+                                        <div className="single-option"><span className="label">Size:</span> {sizes[0]?.size || sizes[0]}</div>
+                                    )
+                                )}
                             </div>
                         )}
                     </div>

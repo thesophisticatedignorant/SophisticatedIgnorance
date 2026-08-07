@@ -61,7 +61,7 @@
     letter-spacing: 2px;
     font-weight: 300;
     padding: 8px 16px;
-    border-radius: 4px;
+    border-radius: 0;
     transition: color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -106,7 +106,7 @@
     margin-top: 0;
     padding: 0 30px;
     background: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
+    border-radius: 0;
     max-height: 0;
     overflow: hidden;
     opacity: 0;
@@ -127,7 +127,7 @@
     letter-spacing: 3px;
     font-weight: 300;
     padding: 8px 16px;
-    border-radius: 4px;
+    border-radius: 0;
     opacity: 0;
     transform: translateY(-10px);
     transition: opacity 0.3s ease, transform 0.3s ease, color 0.15s ease 0s, background 0.15s ease 0s, box-shadow 0.15s ease 0s;
@@ -244,4 +244,43 @@
 
 .newsletter-btn:hover {
     transform: translateX(3px);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .menu-overlay {
+        padding: 40px 20px;
+    }
+    
+    .close-btn {
+        top: 20px;
+        right: 20px;
+        font-size: 32px;
+    }
+
+    .menu-link {
+        font-size: 20px;
+    }
+
+    .menu-label {
+        font-size: 20px;
+    }
+
+    .menu-social-icons {
+        gap: 15px;
+    }
+
+    .social-icon {
+        width: 32px;
+        height: 32px;
+    }
+
+    .social-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .menu-newsletter {
+        padding: 15px 0 20px;
+    }
 }

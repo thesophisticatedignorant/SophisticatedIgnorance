@@ -12,6 +12,114 @@
     font-family: 'Inter', sans-serif;
     overflow-x: hidden;
 
+    .shop-left-nav {
+        position: fixed;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%) scale(0.6); /* Discretely scaled down by default */
+        @media (max-width: 768px) {
+            transform: translateY(-50%) scale(0.45); /* Even smaller by default on mobile */
+            left: 2px;
+        }
+        transform-origin: left center;
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.4s ease, box-shadow 0.4s ease;
+        z-index: 9999;
+        pointer-events: auto;
+        padding: 20px 12px; /* Tight padding to only house notches */
+        
+        /* Backlit bubble housing */
+        background: rgba(120, 120, 120, 0.15); /* Lighter grey, on brand */
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 30px; /* Pill shape */
+        box-shadow: 0 0 25px rgba(255, 255, 255, 0.08), inset 0 0 15px rgba(255, 255, 255, 0.1);
+        
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0; // Eliminated gap to make notches very close
+
+            li {
+                position: relative;
+                display: flex;
+                align-items: center;
+                transition: transform 0.2s ease;
+                transform-origin: left center;
+                padding: 15px 0; // Healthy vertical spacing so content isn't jumbled
+
+                &::before {
+                    content: '';
+                    display: inline-block;
+                    width: 12px; // Doubled width for visibility
+                    height: 2px; // Slightly thicker for brightness
+                    background-color: rgba(255, 255, 255, 0.6); // Much brighter default
+                    box-shadow: 0 0 8px rgba(255, 255, 255, 0.4); // Illumination
+                    margin-right: 0; // Removed margin to keep bubble tight
+                    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+                }
+
+                &.active::before {
+                    background-color: #ffffff;
+                    box-shadow: 0 0 12px rgba(255, 255, 255, 0.9); // Brighter active illumination
+                    transform: scaleX(1.5);
+                }
+
+                a {
+                    position: absolute;
+                    left: 55px; // Positioned further outside the notch for greater distance
+                    color: rgba(255, 255, 255, 0.4);
+                    text-decoration: none;
+                    font-size: 0.75rem;
+                    letter-spacing: 2px;
+                    text-transform: uppercase;
+                    opacity: 0;
+                    transform: translateX(-15px);
+                    transition: all 0.3s ease;
+                    pointer-events: none;
+                    white-space: nowrap;
+                }
+            }
+        }
+
+        &.nav-open, &:hover {
+            transform: translateY(-50%) scale(1); /* Expand/Magnify when interacted with */
+            @media (max-width: 768px) {
+                transform: translateY(-50%) scale(0.75); /* Not as huge on mobile when opened */
+            }
+            background: rgba(140, 140, 140, 0.2); /* Slightly lighter on hover */
+            box-shadow: 0 0 35px rgba(255, 255, 255, 0.1), inset 0 0 20px rgba(255, 255, 255, 0.15);
+
+            ul li a {
+                opacity: 1;
+                transform: translateX(0);
+                pointer-events: auto;
+            }
+            ul li:hover {
+                transform: scale(1.15); /* Additional magnification on individual category hover */
+                a {
+                    color: #fff;
+                }
+            }
+            ul li.active a {
+                color: #fff;
+            }
+        }
+    }
+
+    .redacted-text {
+        color: transparent;
+        text-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
+        user-select: none;
+        pointer-events: none;
+        &::selection {
+            background: transparent;
+        }
+    }
+
     .main-container {
         padding-bottom: 100px;
     }
@@ -22,6 +130,9 @@
         flex-direction: column;
         justify-content: center;
         padding: 0 40px;
+        @media (max-width: 768px) {
+            padding: 0 20px;
+        }
         position: relative;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
@@ -80,6 +191,7 @@
             .hero-image {
                 margin-top: -20px;
                 margin-bottom: -40px;
+                width: 100%;
                 max-width: 600px;
                 height: auto;
                 opacity: 0.9;

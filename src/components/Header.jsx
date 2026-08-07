@@ -13,7 +13,7 @@ function Header({ onMenuClick }) {
 
             {/* Centered Logo */}
             <div className="logo-container">
-                <a href="http://localhost:5180">
+                <a href="/">
                     <img src="/header%20logo.svg" alt="Sophisticated Ignorance" className="header-logo" />
                 </a>
             </div>

@@ -9,6 +9,7 @@ function CardSlider({ isActive, onCycleComplete }) {
     const { isGridVisible } = useGrid() // Shared state with grid overlay
     const [imageScale, setImageScale] = useState(180) // Image height in px, adjust with + / -
     const [isLocked, setIsLocked] = useState(true) // Elements locked
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth)
     const animationRef = useRef(null)
     const lastTimeRef = useRef(Date.now())
     const touchStartRef = useRef(null)
@@ -31,58 +32,59 @@ function CardSlider({ isActive, onCycleComplete }) {
                     alert(newVal ? '🔒 Elements LOCKED' : '🔓 Elements UNLOCKED')
                     return newVal
                 })
-            } else if (e.key === '+' || e.key === '=' || e.key === 'ArrowUp') {
-                setImageScale(prev => {
-                    const newVal = prev + 10
-                    console.log('IMAGE SIZE:', newVal + 'px')
-                    return newVal
-                })
-            } else if (e.key === '-' || e.key === '_' || e.key === 'ArrowDown') {
-                setImageScale(prev => {
-                    const newVal = Math.max(20, prev - 10)
-                    console.log('IMAGE SIZE:', newVal + 'px')
-                    return newVal
-                })
+            } else if (e.key === 'ArrowUp') {
+                // Scroll up - reverse animation (cards go backwards)
+                setDirection(-1)
+            } else if (e.key === 'ArrowDown') {
+                // Scroll down - normal animation (cards flow forward)
+                setDirection(1)
             }
         }
         window.addEventListener('keydown', handleKeyDown)
-        return () => window.removeEventListener('keydown', handleKeyDown)
+        
+        const handleResize = () => setWindowWidth(window.innerWidth)
+        window.addEventListener('resize', handleResize)
+        
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown)
+            window.removeEventListener('resize', handleResize)
+        }
 
     }, [])
 
     const slides = [
         {
-            title: 'FOUNDATIONS', subtitle: 'the architecture\nof self', image: '/foundations.svg', link: 'http://localhost:5181/#foundations',
+            title: 'FOUNDATIONS', subtitle: 'the architecture\nof self', image: '/foundations.svg', link: '/shop#foundations',
             titlePos: { left: '56px', top: '14px' },
             epithetPos: { left: '25px', top: '74px' },
             imagePos: { left: '255px', top: '100px' }
         },
         {
-            title: 'FORTIFICATIONS', subtitle: 'the shield\nof style', image: '/fortifications.svg', link: 'http://localhost:5181/#fortifications',
+            title: 'FORTIFICATIONS', subtitle: 'the shield\nof style', image: '/fortifications.svg', link: '/shop#fortifications',
             titlePos: { left: '10%', top: '6%' },
             epithetPos: { left: '18%', top: '38%' },
             imagePos: { left: '67%', top: '49%' }
         },
         {
-            title: 'RELICS', subtitle: 'the creed\nof craft', image: '/relics.svg', link: 'http://localhost:5181/#relics',
+            title: 'RELICS', subtitle: 'the creed\nof craft', image: '/relics.svg', link: '/shop#relics',
             titlePos: { left: '117px', top: '14px' },
             epithetPos: { left: '69px', top: '78px' },
             imagePos: { left: '241px', top: '101px' }
         },
         {
-            title: 'DOMINION', subtitle: 'the path of\nconquest', image: '/dominion.svg', link: 'http://localhost:5181/#dominion',
+            title: 'DOMINION', subtitle: 'the path of\nconquest', image: '/dominion.svg', link: '/shop#dominion',
             titlePos: { left: '90px', top: '13px' },
             epithetPos: { left: '58px', top: '72px' },
             imagePos: { left: '242px', top: '93px' }
         },
         {
-            title: 'ADORNMENTS', subtitle: 'the reign\nof detail', image: '/adornments.svg', link: 'http://localhost:5181/#adornments',
+            title: 'ADORNMENTS', subtitle: 'the reign\nof detail', image: '/adornments.svg', link: '/shop#adornments',
             titlePos: { left: '61px', top: '15px' },
             epithetPos: { left: '70px', top: '79px' },
             imagePos: { left: '242px', top: '102px' }
         },
         {
-            title: 'CROWNWORKS', subtitle: 'the pinnacle of\nrefinement', image: '/crownworks.svg', link: 'http://localhost:5181/#crownworks',
+            title: 'CROWNWORKS', subtitle: 'the pinnacle of\nrefinement', image: '/crownworks.svg', link: '/shop#crownworks',
             titlePos: { left: '56px', top: '16px' },
             epithetPos: { left: '36px', top: '84px' },
             imagePos: { left: '245px', top: '108px' }
@@ -262,6 +264,16 @@ function CardSlider({ isActive, onCycleComplete }) {
         return { scale, zDepth, opacity, position }
     }
 
+    const isMobile = windowWidth < 768;
+    const mobileScale = isMobile ? (320 / 900) : 1;
+
+    const scalePos = (posStr) => {
+        if (typeof posStr === 'string' && posStr.endsWith('px')) {
+            return (parseFloat(posStr) * mobileScale) + 'px';
+        }
+        return posStr;
+    };
+
     return (
         <div
             className="card-slider active"
@@ -310,7 +322,7 @@ function CardSlider({ isActive, onCycleComplete }) {
                                     padding: '20px'
                                 }}>
                                     {/* Draggable Title with crosshairs */}
-                                    <div style={{ position: 'absolute', left: slide.titlePos.left, top: slide.titlePos.top }}>
+                                    <div style={{ position: 'absolute', left: scalePos(slide.titlePos.left), top: scalePos(slide.titlePos.top) }}>
                                         <h2
                                             className="card-title"
                                             style={{
@@ -353,7 +365,7 @@ function CardSlider({ isActive, onCycleComplete }) {
                                     </div>
 
                                     {/* Draggable Epithet with crosshairs */}
-                                    <div style={{ position: 'absolute', left: slide.epithetPos.left, top: slide.epithetPos.top }}>
+                                    <div style={{ position: 'absolute', left: scalePos(slide.epithetPos.left), top: scalePos(slide.epithetPos.top) }}>
                                         <p
                                             className="card-subtitle"
                                             style={{
@@ -396,13 +408,13 @@ function CardSlider({ isActive, onCycleComplete }) {
                                     </div>
 
                                     {/* Draggable Image with crosshairs */}
-                                    <div style={{ position: 'absolute', left: slide.imagePos.left, top: slide.imagePos.top, transform: 'translate(-50%, -50%)' }}>
+                                    <div style={{ position: 'absolute', left: scalePos(slide.imagePos.left), top: scalePos(slide.imagePos.top), transform: 'translate(-50%, -50%)' }}>
                                         <img
                                             src={slide.image}
                                             alt={slide.title}
                                             draggable={false}
                                             style={{
-                                                height: imageScale + 'px',
+                                                height: (imageScale * mobileScale) + 'px',
                                                 width: 'auto',
                                                 objectFit: 'contain',
                                                 cursor: isLocked ? 'pointer' : 'move',
