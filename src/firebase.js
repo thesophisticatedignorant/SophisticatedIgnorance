@@ -4,9 +4,9 @@ import { getFirestore } from "firebase/firestore";
 const firebaseConfig = {
     // TODO: The USER needs to replace this with their actual Firebase Config keys
     apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.firebasestorage.app",
+    authDomain: "sophisticated-ignorance.firebaseapp.com",
+    projectId: "sophisticated-ignorance",
+    storageBucket: "sophisticated-ignorance.firebasestorage.app",
     messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
     appId: "YOUR_APP_ID"
 };

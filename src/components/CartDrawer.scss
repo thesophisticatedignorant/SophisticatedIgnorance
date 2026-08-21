@@ -8,7 +8,7 @@
     opacity: 0;
     pointer-events: none;
     z-index: 10000;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s cubic-bezier(.22,.61,.36,1);
 
     &.active {
         pointer-events: all;
@@ -247,7 +247,7 @@
             font-weight: 600;
             letter-spacing: 0.2em;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(.22,.61,.36,1);
             margin-bottom: 12px;
 
             &:hover {
@@ -266,7 +266,7 @@
             font-weight: 500;
             letter-spacing: 0.15em;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(.22,.61,.36,1);
 
             &:hover {
                 background: #fff;
@@ -281,7 +281,12 @@
         width: 100%;
 
         .cart-header {
-            padding: 20px;
+            padding: 15px 20px;
+            
+            .close-btn {
+                position: relative;
+                top: -5px; /* Raise the X button */
+            }
         }
 
         .cart-item {

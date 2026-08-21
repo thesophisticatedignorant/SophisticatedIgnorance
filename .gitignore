@@ -118,3 +118,7 @@ dist
 
 # macOS
 .DS_Store
+
+*.mp4
+*.mov
+*.zip

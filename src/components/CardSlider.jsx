@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useGrid } from '../context/GridContext'
 import './CardSlider.css'
 
 function CardSlider({ isActive, onCycleComplete }) {
+    const navigate = useNavigate()
     const [progress, setProgress] = useState(5.4) // Start at FOUNDATIONS (front position)
     const [direction, setDirection] = useState(1)
     const [isPaused, setIsPaused] = useState(false) // Animation enabled
@@ -10,6 +12,7 @@ function CardSlider({ isActive, onCycleComplete }) {
     const [imageScale, setImageScale] = useState(180) // Image height in px, adjust with + / -
     const [isLocked, setIsLocked] = useState(true) // Elements locked
     const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+    const isMobile = windowWidth <= 768
     const animationRef = useRef(null)
     const lastTimeRef = useRef(Date.now())
     const touchStartRef = useRef(null)
@@ -54,37 +57,37 @@ function CardSlider({ isActive, onCycleComplete }) {
 
     const slides = [
         {
-            title: 'FOUNDATIONS', subtitle: 'the architecture\nof self', image: '/foundations.svg', link: '/shop#foundations',
+            title: 'FOUNDATIONS', subtitle: 'the architecture\nof self', image: '/foundations.svg', link: '/shop/foundations',
             titlePos: { left: '56px', top: '14px' },
             epithetPos: { left: '25px', top: '74px' },
             imagePos: { left: '255px', top: '100px' }
         },
         {
-            title: 'FORTIFICATIONS', subtitle: 'the shield\nof style', image: '/fortifications.svg', link: '/shop#fortifications',
+            title: 'FORTIFICATIONS', subtitle: 'the shield\nof style', image: '/fortifications.svg', link: '/shop/fortifications',
             titlePos: { left: '10%', top: '6%' },
             epithetPos: { left: '18%', top: '38%' },
             imagePos: { left: '67%', top: '49%' }
         },
         {
-            title: 'RELICS', subtitle: 'the creed\nof craft', image: '/relics.svg', link: '/shop#relics',
+            title: 'RELICS', subtitle: 'the creed\nof craft', image: '/relics.svg', link: '/shop/relics',
             titlePos: { left: '117px', top: '14px' },
             epithetPos: { left: '69px', top: '78px' },
             imagePos: { left: '241px', top: '101px' }
         },
         {
-            title: 'DOMINION', subtitle: 'the path of\nconquest', image: '/dominion.svg', link: '/shop#dominion',
+            title: 'DOMINION', subtitle: 'the path of\nconquest', image: '/dominion.svg', link: '/shop/dominion',
             titlePos: { left: '90px', top: '13px' },
             epithetPos: { left: '58px', top: '72px' },
             imagePos: { left: '242px', top: '93px' }
         },
         {
-            title: 'ADORNMENTS', subtitle: 'the reign\nof detail', image: '/adornments.svg', link: '/shop#adornments',
+            title: 'ADORNMENTS', subtitle: 'the reign\nof detail', image: '/adornments.svg', link: '/shop/adornments',
             titlePos: { left: '61px', top: '15px' },
             epithetPos: { left: '70px', top: '79px' },
             imagePos: { left: '242px', top: '102px' }
         },
         {
-            title: 'CROWNWORKS', subtitle: 'the pinnacle of\nrefinement', image: '/crownworks.svg', link: '/shop#crownworks',
+            title: 'CROWNWORKS', subtitle: 'the pinnacle of\nrefinement', image: '/crownworks.svg', link: '/shop/crownworks',
             titlePos: { left: '56px', top: '16px' },
             epithetPos: { left: '36px', top: '84px' },
             imagePos: { left: '245px', top: '108px' }
@@ -212,13 +215,18 @@ function CardSlider({ isActive, onCycleComplete }) {
         const normalizedPos = position / slides.length
 
         const baseScale = 0.05 + Math.pow(1 - normalizedPos, 2.5) * 2.0
-        const scale = baseScale * 0.8
+        let scale = baseScale * 0.8
+        
+        if (isMobile) {
+            scale *= 0.6; // Scale down cards uniformly so borders are properly featured on screen
+        }
+        
         const zDepth = (1 - normalizedPos) * 800 - 200
 
         // Calculate top-left corner position
         // Cards are 900px wide, 500px tall (max-width of cards-container)
-        const cardWidth = 900
-        const cardHeight = 500
+        const cardWidth = isMobile ? 500 : 900
+        const cardHeight = isMobile ? 700 : 500
         const centerX = window.innerWidth / 2
         const centerY = window.innerHeight / 2
 
@@ -264,15 +272,12 @@ function CardSlider({ isActive, onCycleComplete }) {
         return { scale, zDepth, opacity, position }
     }
 
-    const isMobile = windowWidth < 768;
     const mobileScale = isMobile ? (320 / 900) : 1;
 
-    const scalePos = (posStr) => {
-        if (typeof posStr === 'string' && posStr.endsWith('px')) {
-            return (parseFloat(posStr) * mobileScale) + 'px';
-        }
-        return posStr;
-    };
+    const scalePos = (pos) => {
+        if (typeof pos === 'string' && pos.endsWith('%')) return pos
+        return pos
+    }
 
     return (
         <div
@@ -319,110 +324,167 @@ function CardSlider({ isActive, onCycleComplete }) {
                                     position: 'relative',
                                     width: '100%',
                                     height: '100%',
-                                    padding: '20px'
+                                    padding: '20px',
+                                    display: isMobile ? 'flex' : 'block',
+                                    flexDirection: isMobile ? 'column' : 'unset',
+                                    alignItems: isMobile ? 'center' : 'unset',
+                                    justifyContent: isMobile ? 'center' : 'unset',
+                                    gap: isMobile ? '15px' : '0',
+                                    pointerEvents: 'auto',
+                                    cursor: 'pointer'
+                                }}
+                                onClick={() => {
+                                    if (isMobile) {
+                                        navigate(slide.link)
+                                    } else if (isLocked && position < 0.5) {
+                                        navigate(slide.link)
+                                    }
                                 }}>
-                                    {/* Draggable Title with crosshairs */}
-                                    <div style={{ position: 'absolute', left: scalePos(slide.titlePos.left), top: scalePos(slide.titlePos.top) }}>
-                                        <h2
-                                            className="card-title"
-                                            style={{
-                                                position: 'relative',
-                                                cursor: isLocked ? 'pointer' : 'move',
-                                                pointerEvents: 'auto',
-                                                margin: 0
-                                            }}
-                                            onClick={() => isLocked && (window.location.href = slide.link)}
-                                            onMouseDown={(e) => {
-                                                if (isLocked) return
-                                                const wrapper = e.currentTarget.parentElement
-                                                const startX = e.clientX
-                                                const startY = e.clientY
-                                                const startLeft = wrapper.offsetLeft
-                                                const startTop = wrapper.offsetTop
+                                    {/* Wrapper for text content on mobile */}
+                                    <div style={{
+                                        position: isMobile ? 'relative' : 'static',
+                                        display: isMobile ? 'flex' : 'block',
+                                        flexDirection: isMobile ? 'column' : 'unset',
+                                        width: isMobile ? '100%' : 'auto',
+                                        textAlign: isMobile ? 'center' : 'unset',
+                                        gap: isMobile ? '5px' : '0',
+                                        zIndex: 2
+                                    }}>
+                                        {/* Draggable Title with crosshairs */}
+                                        <div style={{
+                                            position: isMobile ? 'relative' : 'absolute',
+                                            left: isMobile ? 'auto' : scalePos(slide.titlePos.left),
+                                            top: isMobile ? 'auto' : scalePos(slide.titlePos.top),
+                                            transform: isMobile ? 'none' : 'none',
+                                            width: isMobile ? '100%' : 'auto',
+                                            textAlign: isMobile ? 'center' : 'left'
+                                        }}>
+                                            <h2
+                                                className="card-title"
+                                                style={{
+                                                    position: 'relative',
+                                                    cursor: isLocked ? 'pointer' : 'move',
+                                                    pointerEvents: 'auto',
+                                                    margin: 0
+                                                }}
+                                                onClick={() => {
+                                                    if (isMobile) navigate(slide.link);
+                                                    else if (isLocked) navigate(slide.link);
+                                                }}
+                                                onMouseDown={(e) => {
+                                                    if (isLocked) return
+                                                    const wrapper = e.currentTarget.parentElement
+                                                    const startX = e.clientX
+                                                    const startY = e.clientY
+                                                    const startLeft = wrapper.offsetLeft
+                                                    const startTop = wrapper.offsetTop
 
-                                                const onMouseMove = (moveE) => {
-                                                    const deltaX = moveE.clientX - startX
-                                                    const deltaY = moveE.clientY - startY
-                                                    wrapper.style.left = (startLeft + deltaX) + 'px'
-                                                    wrapper.style.top = (startTop + deltaY) + 'px'
-                                                }
+                                                    const onMouseMove = (moveE) => {
+                                                        const deltaX = moveE.clientX - startX
+                                                        const deltaY = moveE.clientY - startY
+                                                        wrapper.style.left = (startLeft + deltaX) + 'px'
+                                                        wrapper.style.top = (startTop + deltaY) + 'px'
+                                                    }
 
-                                                const onMouseUp = () => {
-                                                    document.removeEventListener('mousemove', onMouseMove)
-                                                    document.removeEventListener('mouseup', onMouseUp)
-                                                    console.log('TITLE POSITION - left:', wrapper.style.left, 'top:', wrapper.style.top)
-                                                    alert('Title position: Left: ' + wrapper.style.left + ', Top: ' + wrapper.style.top)
-                                                }
+                                                    const onMouseUp = () => {
+                                                        document.removeEventListener('mousemove', onMouseMove)
+                                                        document.removeEventListener('mouseup', onMouseUp)
+                                                        console.log('TITLE POSITION - left:', wrapper.style.left, 'top:', wrapper.style.top)
+                                                        alert('Title position: Left: ' + wrapper.style.left + ', Top: ' + wrapper.style.top)
+                                                    }
 
-                                                document.addEventListener('mousemove', onMouseMove)
-                                                document.addEventListener('mouseup', onMouseUp)
-                                                e.preventDefault()
-                                            }}
-                                        >{slide.title}</h2>
-                                        {/* Crosshairs for title - visible when grid is on */}
-                                        {isGridVisible && <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: '2px', backgroundColor: 'lime', pointerEvents: 'none' }} />}
-                                        {isGridVisible && <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: '2px', backgroundColor: 'lime', pointerEvents: 'none' }} />}
-                                    </div>
+                                                    document.addEventListener('mousemove', onMouseMove)
+                                                    document.addEventListener('mouseup', onMouseUp)
+                                                    e.preventDefault()
+                                                }}
+                                            >{slide.title}</h2>
+                                            {/* Crosshairs for title - visible when grid is on */}
+                                            {isGridVisible && !isMobile && <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: '2px', backgroundColor: 'lime', pointerEvents: 'none' }} />}
+                                            {isGridVisible && !isMobile && <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: '2px', backgroundColor: 'lime', pointerEvents: 'none' }} />}
+                                        </div>
 
-                                    {/* Draggable Epithet with crosshairs */}
-                                    <div style={{ position: 'absolute', left: scalePos(slide.epithetPos.left), top: scalePos(slide.epithetPos.top) }}>
-                                        <p
-                                            className="card-subtitle"
-                                            style={{
-                                                position: 'relative',
-                                                cursor: isLocked ? 'pointer' : 'move',
-                                                pointerEvents: 'auto',
-                                                margin: 0
-                                            }}
-                                            onClick={() => isLocked && (window.location.href = slide.link)}
-                                            onMouseDown={(e) => {
-                                                if (isLocked) return
-                                                const wrapper = e.currentTarget.parentElement
-                                                const startX = e.clientX
-                                                const startY = e.clientY
-                                                const startLeft = wrapper.offsetLeft
-                                                const startTop = wrapper.offsetTop
+                                        {/* Draggable Epithet with crosshairs */}
+                                        <div style={{
+                                            position: isMobile ? 'relative' : 'absolute',
+                                            left: isMobile ? 'auto' : scalePos(slide.epithetPos.left),
+                                            top: isMobile ? 'auto' : scalePos(slide.epithetPos.top),
+                                            transform: isMobile ? 'none' : 'none',
+                                            width: isMobile ? '100%' : 'auto',
+                                            textAlign: isMobile ? 'center' : 'left'
+                                        }}>
+                                            <p
+                                                className="card-subtitle"
+                                                style={{
+                                                    position: 'relative',
+                                                    cursor: isLocked ? 'pointer' : 'move',
+                                                    pointerEvents: 'auto',
+                                                    margin: 0,
+                                                    fontSize: isMobile && (slide.title === 'ADORNMENTS' || slide.title === 'CROWNWORKS') ? '11px' : undefined
+                                                }}
+                                                onClick={() => {
+                                                    if (isMobile) navigate(slide.link);
+                                                    else if (isLocked) navigate(slide.link);
+                                                }}
+                                                onMouseDown={(e) => {
+                                                    if (isLocked) return
+                                                    const wrapper = e.currentTarget.parentElement
+                                                    const startX = e.clientX
+                                                    const startY = e.clientY
+                                                    const startLeft = wrapper.offsetLeft
+                                                    const startTop = wrapper.offsetTop
 
-                                                const onMouseMove = (moveE) => {
-                                                    const deltaX = moveE.clientX - startX
-                                                    const deltaY = moveE.clientY - startY
-                                                    wrapper.style.left = (startLeft + deltaX) + 'px'
-                                                    wrapper.style.top = (startTop + deltaY) + 'px'
-                                                }
+                                                    const onMouseMove = (moveE) => {
+                                                        const deltaX = moveE.clientX - startX
+                                                        const deltaY = moveE.clientY - startY
+                                                        wrapper.style.left = (startLeft + deltaX) + 'px'
+                                                        wrapper.style.top = (startTop + deltaY) + 'px'
+                                                    }
 
-                                                const onMouseUp = () => {
-                                                    document.removeEventListener('mousemove', onMouseMove)
-                                                    document.removeEventListener('mouseup', onMouseUp)
-                                                    console.log('EPITHET POSITION - left:', wrapper.style.left, 'top:', wrapper.style.top)
-                                                    alert('Epithet position: Left: ' + wrapper.style.left + ', Top: ' + wrapper.style.top)
-                                                }
+                                                    const onMouseUp = () => {
+                                                        document.removeEventListener('mousemove', onMouseMove)
+                                                        document.removeEventListener('mouseup', onMouseUp)
+                                                        console.log('EPITHET POSITION - left:', wrapper.style.left, 'top:', wrapper.style.top)
+                                                        alert('Epithet position: Left: ' + wrapper.style.left + ', Top: ' + wrapper.style.top)
+                                                    }
 
-                                                document.addEventListener('mousemove', onMouseMove)
-                                                document.addEventListener('mouseup', onMouseUp)
-                                                e.preventDefault()
-                                            }}
-                                        >{slide.subtitle}</p>
-                                        {/* Crosshairs for epithet - visible when grid is on */}
-                                        {isGridVisible && <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: '2px', backgroundColor: 'cyan', pointerEvents: 'none' }} />}
-                                        {isGridVisible && <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: '2px', backgroundColor: 'cyan', pointerEvents: 'none' }} />}
+                                                    document.addEventListener('mousemove', onMouseMove)
+                                                    document.addEventListener('mouseup', onMouseUp)
+                                                    e.preventDefault()
+                                                }}
+                                            >{slide.subtitle}</p>
+                                            {/* Crosshairs for epithet - visible when grid is on */}
+                                            {isGridVisible && !isMobile && <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: '2px', backgroundColor: 'cyan', pointerEvents: 'none' }} />}
+                                            {isGridVisible && !isMobile && <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: '2px', backgroundColor: 'cyan', pointerEvents: 'none' }} />}
+                                        </div>
                                     </div>
 
                                     {/* Draggable Image with crosshairs */}
-                                    <div style={{ position: 'absolute', left: scalePos(slide.imagePos.left), top: scalePos(slide.imagePos.top), transform: 'translate(-50%, -50%)' }}>
+                                    <div style={{
+                                        position: isMobile ? 'relative' : 'absolute',
+                                        left: isMobile ? 'auto' : scalePos(slide.imagePos.left),
+                                        top: isMobile ? 'auto' : scalePos(slide.imagePos.top),
+                                        transform: isMobile ? 'none' : 'translate(-50%, -50%)',
+                                        width: isMobile ? '80%' : 'auto',
+                                        marginTop: isMobile ? '-40px' : '0'
+                                    }}>
                                         <img
                                             src={slide.image}
                                             alt={slide.title}
                                             draggable={false}
                                             style={{
-                                                height: (imageScale * mobileScale) + 'px',
-                                                width: 'auto',
+                                                height: isMobile ? 'auto' : (imageScale * mobileScale) + 'px',
+                                                maxHeight: isMobile ? '200px' : 'none',
+                                                width: isMobile ? '100%' : 'auto',
                                                 objectFit: 'contain',
                                                 cursor: isLocked ? 'pointer' : 'move',
-                                                pointerEvents: 'auto',
+                                                pointerEvents: isMobile ? 'none' : 'auto',
                                                 display: 'block',
                                                 filter: 'drop-shadow(0 0 2px rgba(255,255,255,0.9))'
                                             }}
-                                            onClick={() => isLocked && (window.location.href = slide.link)}
+                                            onClick={() => {
+                                                if (isMobile) navigate(slide.link);
+                                                else if (isLocked) navigate(slide.link);
+                                            }}
                                             onMouseDown={(e) => {
                                                 if (isLocked) return
                                                 const wrapper = e.target.parentElement
@@ -452,8 +514,8 @@ function CardSlider({ isActive, onCycleComplete }) {
                                             }}
                                         />
                                         {/* Crosshairs for image - visible when grid is on */}
-                                        {isGridVisible && <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: '2px', backgroundColor: 'red', pointerEvents: 'none' }} />}
-                                        {isGridVisible && <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: '2px', backgroundColor: 'red', pointerEvents: 'none' }} />}
+                                        {isGridVisible && !isMobile && <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: '2px', backgroundColor: 'red', pointerEvents: 'none' }} />}
+                                        {isGridVisible && !isMobile && <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: '2px', backgroundColor: 'red', pointerEvents: 'none' }} />}
                                     </div>
                                 </div>
                             </div>

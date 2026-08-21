@@ -277,11 +277,12 @@
                 padding: 15px 0;
                 display: flex;
                 align-items: center;
-                justify-content: center; // Centered within the field
+                justify-content: flex-start; // Align left on desktop
                 color: #fff;
                 
                 @media (max-width: 768px) {
                     padding: 8px 0;
+                    justify-content: flex-start;
                 }
             }
 
@@ -394,56 +395,155 @@
             }
         }
 
-        .product-specs {
-            list-style-type: disc;
-            padding-left: 20px;
-            margin-bottom: 40px;
+        .desktop-specs {
+            display: block;
+            @media (max-width: 768px) {
+                display: none;
+            }
 
-            li {
-                margin-bottom: 8px;
-                color: #ccc;
-                font-size: 0.95rem;
-                line-height: 1.4;
+            .product-specs {
+                list-style-type: disc;
+                padding-left: 20px;
+                margin-bottom: 40px;
+
+                li {
+                    margin-bottom: 8px;
+                    color: #ccc;
+                    font-size: 0.95rem;
+                    line-height: 1.4;
+                }
+            }
+
+            .product-specs-columns {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); // Automatically handle 2 or 3 columns
+                gap: 20px;
+                margin-bottom: 30px; // Reduced bottom margin to fit in frame
+                width: 100%;
+
+                @media (max-width: 600px) {
+                    grid-template-columns: 1fr;
+                }
+
+                .specs-column {
+                    h4 {
+                        font-family: 'Syncopate', sans-serif;
+                        font-size: 0.8rem; // Reduced to fit more info
+                        font-weight: 700;
+                        margin: 0 0 8px;
+                        letter-spacing: 1px;
+                        text-transform: uppercase;
+                        color: #fff;
+                    }
+
+                    ul {
+                        list-style-type: disc;
+                        padding-left: 20px;
+                        margin: 0;
+
+                        li {
+                            margin-bottom: 5px; // Tighter vertical spacing
+                            color: #ccc;
+                            font-size: 0.75rem; // Scaled down point size to fit content without scrolling
+                            line-height: 1.3;
+
+                            &.indented {
+                                margin-left: 20px;
+                            }
+                        }
+                    }
+                }
             }
         }
 
-        .product-specs-columns {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); // Automatically handle 2 or 3 columns
-            gap: 20px;
-            margin-bottom: 30px; // Reduced bottom margin to fit in frame
-            width: 100%;
-
-            @media (max-width: 600px) {
-                grid-template-columns: 1fr;
+        .mobile-specs {
+            display: none;
+            @media (max-width: 768px) {
+                display: block;
             }
 
-            .specs-column {
-                h4 {
-                    font-family: 'Syncopate', sans-serif;
-                    font-size: 0.8rem; // Reduced to fit more info
-                    font-weight: 700;
-                    margin: 0 0 8px;
-                    letter-spacing: 1px;
+            .product-specs-columns {
+                display: flex;
+                flex-direction: column;
+                gap: 0;
+                width: 100%;
+            }
+
+            .spec-accordion {
+                width: 100%;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                padding: 20px 0;
+
+                summary {
+                    font-family: 'Inter', sans-serif;
+                    font-size: 0.8rem;
+                    font-weight: 500;
+                    letter-spacing: 2px;
                     text-transform: uppercase;
                     color: #fff;
+                    pointer-events: auto;
+                    cursor: pointer;
+                    margin-bottom: 0;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    width: 100%;
+                    list-style: none;
+
+                    &::-webkit-details-marker {
+                        display: none;
+                    }
+
+                    &::after {
+                        content: '+';
+                        font-size: 1.2rem;
+                        font-family: 'Inter', sans-serif;
+                        font-weight: 300;
+                        width: 20px;
+                        text-align: right;
+                    }
                 }
 
-                ul {
-                    list-style-type: disc;
-                    padding-left: 20px;
-                    margin: 0;
+                &[open] summary {
+                    margin-bottom: 15px;
+                    &::after {
+                        content: '−';
+                    }
+                }
 
-                    li {
-                        margin-bottom: 5px; // Tighter vertical spacing
-                        color: #ccc;
-                        font-size: 0.75rem; // Scaled down point size to fit content without scrolling
-                        line-height: 1.3;
+                .accordion-content {
+                    ul {
+                        list-style-type: disc;
+                        padding-left: 20px;
+                        margin: 0;
 
-                        &.indented {
-                            margin-left: 20px;
+                        li {
+                            font-family: 'Inter', sans-serif;
+                            font-size: 0.85rem;
+                            color: #888;
+                            line-height: 1.6;
+                            margin-bottom: 5px;
+
+                            &.indented {
+                                list-style-type: circle;
+                                margin-left: 20px;
+                            }
                         }
                     }
+                }
+            }
+
+            .product-specs {
+                list-style-type: disc;
+                padding-left: 20px;
+                margin: 0;
+
+                li {
+                    font-family: 'Inter', sans-serif;
+                    font-size: 0.85rem;
+                    color: #888;
+                    line-height: 1.6;
+                    margin-bottom: 5px;
                 }
             }
         }
@@ -454,6 +554,11 @@
             gap: 20px;
             width: 100%;
 
+            @media (max-width: 768px) {
+                flex-direction: column;
+                gap: 12px;
+            }
+
             .quantity-selector {
                 display: flex;
                 border: 1px solid #fff;
@@ -461,6 +566,11 @@
                 overflow: hidden;
                 height: 50px;
                 align-items: center;
+
+                @media (max-width: 768px) {
+                    height: 54px;
+                    justify-content: space-between;
+                }
 
                 button {
                     background: none;
@@ -473,6 +583,10 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
+
+                    @media (max-width: 768px) {
+                        width: 80px;
+                    }
 
                     &:hover {
                         background: rgba(255, 255, 255, 0.1);
@@ -498,6 +612,18 @@
                 letter-spacing: 0.2em;
                 cursor: pointer;
                 display: flex;
+                border-radius: 0;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s cubic-bezier(.22,.61,.36,1);
+                position: relative;
+                overflow: hidden;
+
+                @media (max-width: 768px) {
+                    width: 100%;
+                    height: 60px;
+                    font-size: 0.85rem;
+                }
                 border-radius: 0;
                 align-items: center;
                 justify-content: center;

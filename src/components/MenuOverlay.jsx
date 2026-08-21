@@ -16,7 +16,8 @@ function MenuOverlay({ isOpen, onClose, scrollToSection }) {
         'RELICS',
         'DOMINION',
         'ADORNMENTS',
-        'CROWNWORKS'
+        'CROWNWORKS',
+        'HOUSE OF CROWNS'
     ]
 
     // Reset shop dropdown when menu closes
@@ -25,6 +26,16 @@ function MenuOverlay({ isOpen, onClose, scrollToSection }) {
             setShopOpen(false)
         }
     }, [isOpen])
+
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape' && isOpen) {
+                onClose()
+            }
+        }
+        window.addEventListener('keydown', handleKeyDown)
+        return () => window.removeEventListener('keydown', handleKeyDown)
+    }, [isOpen, onClose])
 
     const handleHomeClick = (e) => {
         e.preventDefault()
@@ -39,13 +50,13 @@ function MenuOverlay({ isOpen, onClose, scrollToSection }) {
 
     const handleShopSectionClick = (e, item) => {
         e.preventDefault()
-        const sectionId = item.toLowerCase()
-        if (location.pathname === '/shop') {
+        const sectionId = item.toLowerCase().replace(/ /g, '-')
+        if (location.pathname === '/shop' || location.pathname.startsWith('/shop/')) {
             if (scrollToSection) {
                 scrollToSection(sectionId)
             }
         } else {
-            navigate(`/shop#${sectionId}`)
+            navigate(`/shop/${sectionId}`)
         }
         onClose()
     }
@@ -83,45 +94,29 @@ function MenuOverlay({ isOpen, onClose, scrollToSection }) {
                     </button>
                     <div className={`menu-dropdown-content ${shopOpen ? 'open' : ''}`}>
                         {shopItems.map((item, index) => (
-                            <a
+                            <a 
                                 key={index}
-                                href={`#${item.toLowerCase()}`}
-                                className="menu-dropdown-link"
+                                href={`/shop/${item.toLowerCase().replace(/ /g, '-')}`} 
+                                className="shop-sublink elegant" 
                                 onClick={(e) => handleShopSectionClick(e, item)}
-                                style={{
-                                    transition: shopOpen
-                                        ? `opacity 0.3s ease ${index * 60}ms, transform 0.3s ease ${index * 60}ms, color 0.15s ease 0s, background 0.15s ease 0s, box-shadow 0.15s ease 0s`
-                                        : 'opacity 0.3s ease 0s, transform 0.3s ease 0s, color 0.15s ease 0s, background 0.15s ease 0s, box-shadow 0.15s ease 0s'
-                                }}
+                                style={{ animationDelay: `${0.3 + (index * 0.05)}s` }}
                             >
+                                <span className="idx" style={{ opacity: 0.3 }}>{String(index + 1).padStart(2, '0')} — </span>
                                 {item}
                             </a>
                         ))}
-                        {/* House of Crowns - Section Link */}
-                        <a
-                            href="#house-of-crowns"
-                            className="menu-dropdown-link"
-                            onClick={(e) => handleShopSectionClick(e, 'house-of-crowns')}
-                            style={{
-                                transition: shopOpen
-                                    ? `opacity 0.3s ease ${shopItems.length * 60}ms, transform 0.3s ease ${shopItems.length * 60}ms, color 0.15s ease 0s, background 0.15s ease 0s, box-shadow 0.15s ease 0s`
-                                    : 'opacity 0.3s ease 0s, transform 0.3s ease 0s, color 0.15s ease 0s, background 0.15s ease 0s, box-shadow 0.15s ease 0s'
-                            }}
-                        >
-                            HOUSE OF CROWNS
-                        </a>
                     </div>
                 </div>
 
-                <a href="#maison-manifest" className="menu-link">MAISON MANIFEST</a>
-                <a href="#the-continuum" className="menu-link">THE CONTINUUM</a>
+                <a href="https://cireconglomerate.com" target="_blank" rel="noopener noreferrer" className="menu-link">CIRE CONGLOMERATE</a>
+                <a href="#the-continuum" className="menu-link continuum-link" data-hover="COMING SOON">THE CONTINUUM</a>
                 <a href="#contact" className="menu-link">CONTACT</a>
 
                 {/* CONNECT Section with Social Icons */}
                 <div className="menu-connect">
                     <span className="menu-label">CONNECT</span>
                     <div className="menu-social-icons">
-                        <a href="https://www.instagram.com/cireconglomerate" target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="Instagram">
+                        <a href="https://www.instagram.com/cireconglomerate/" target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="Instagram">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                                 <circle cx="12" cy="12" r="4" />

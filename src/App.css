@@ -20,7 +20,7 @@ body {
 
 /* Parallax Layer - smooth movement on cursor tracking */
 .parallax-layer {
-  transition: transform 0.15s ease-out;
+  transition: transform 0.15s cubic-bezier(.22,.61,.36,1);
   /* Extend slightly beyond viewport to prevent edge gaps during movement */
   margin: -30px;
   padding: 30px;
@@ -36,6 +36,8 @@ body {
   filter: saturate(0.65) brightness(0.75) contrast(1.1);
 }
 
+/* Mobile background handling removed to allow standard inset: 0 and background-size: cover to fill the screen */
+
 /* Base Layer - Toned down luxurious black and gold marble */
 .marble-overlay::before {
   content: '';
@@ -46,7 +48,7 @@ body {
   background-position: center;
   mix-blend-mode: normal;
   opacity: 1;
-  animation: veinFloat 100s ease-in-out infinite alternate;
+  animation: veinFloat 100s cubic-bezier(.22,.61,.36,1) infinite alternate;
   /* Smooth scaling for larger screens */
   image-rendering: -webkit-optimize-contrast;
   image-rendering: smooth;
@@ -69,7 +71,7 @@ body {
      - Soft blur to reduce pixelation on large screens */
   filter:
     contrast(1.8) brightness(1.3) saturate(1.2) hue-rotate(-5deg) blur(1px);
-  animation: metallicGlow 10s ease-in-out infinite;
+  animation: metallicGlow 10s cubic-bezier(.22,.61,.36,1) infinite;
   /* Smooth scaling */
   image-rendering: -webkit-optimize-contrast;
   image-rendering: smooth;

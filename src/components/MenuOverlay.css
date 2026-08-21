@@ -5,15 +5,17 @@
     right: 0;
     bottom: 0;
     background-color: #000;
-    z-index: 200;
+    z-index: 10000;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.5s ease;
+    transition: opacity 0.5s cubic-bezier(.22,.61,.36,1);
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 60px;
+    justify-content: flex-start;
+    padding: 60px 20px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .menu-overlay.open {
@@ -23,7 +25,7 @@
 
 .close-btn {
     position: absolute;
-    top: 30px;
+    top: 90px;
     right: 40px;
     background: none;
     border: none;
@@ -41,17 +43,41 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
     gap: 20px;
-    max-height: 80vh;
-    overflow-y: auto;
-    padding: 20px 0 80px;
-    /* Reduced bottom padding */
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    padding: 10vh 0 120px;
+    width: 100%;
 }
 
-.menu-nav::-webkit-scrollbar {
-    display: none;
+.shop-sublink {
+    display: block;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    margin-bottom: 15px;
+    letter-spacing: 2px;
+    transition: color 0.3s cubic-bezier(.22,.61,.36,1), transform 0.3s cubic-bezier(.22,.61,.36,1);
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.shop-sublink.elegant {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.shop-sublink.elegant:hover {
+    color: #fff;
+    transform: translateX(10px);
+}
+
+.shop-dropdown.open .shop-sublink,
+.menu-dropdown-content.open .shop-sublink {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .menu-link {
@@ -62,7 +88,7 @@
     font-weight: 300;
     padding: 8px 16px;
     border-radius: 0;
-    transition: color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    transition: color 0.15s cubic-bezier(.22,.61,.36,1), background 0.15s cubic-bezier(.22,.61,.36,1), box-shadow 0.15s cubic-bezier(.22,.61,.36,1);
 }
 
 .menu-link:hover {
@@ -110,11 +136,11 @@
     max-height: 0;
     overflow: hidden;
     opacity: 0;
-    transition: max-height 0.4s ease, opacity 0.3s ease, margin-top 0.3s ease, padding 0.3s ease;
+    transition: max-height 0.4s cubic-bezier(.22,.61,.36,1), opacity 0.3s cubic-bezier(.22,.61,.36,1), margin-top 0.3s cubic-bezier(.22,.61,.36,1), padding 0.3s cubic-bezier(.22,.61,.36,1);
 }
 
 .menu-dropdown-content.open {
-    max-height: 400px;
+    max-height: 600px;
     opacity: 1;
     margin-top: 12px;
     padding: 12px 24px;
@@ -130,7 +156,7 @@
     border-radius: 0;
     opacity: 0;
     transform: translateY(-10px);
-    transition: opacity 0.3s ease, transform 0.3s ease, color 0.15s ease 0s, background 0.15s ease 0s, box-shadow 0.15s ease 0s;
+    transition: opacity 0.3s cubic-bezier(.22,.61,.36,1), transform 0.3s cubic-bezier(.22,.61,.36,1), color 0.15s cubic-bezier(.22,.61,.36,1) 0s, background 0.15s cubic-bezier(.22,.61,.36,1) 0s, box-shadow 0.15s cubic-bezier(.22,.61,.36,1) 0s;
 }
 
 .menu-dropdown-content.open .menu-dropdown-link {
@@ -169,7 +195,7 @@
     width: 36px;
     height: 36px;
     color: #6b7fff;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(.22,.61,.36,1);
 }
 
 .social-icon svg {
@@ -249,7 +275,14 @@
 /* Mobile Responsive */
 @media (max-width: 768px) {
     .menu-overlay {
-        padding: 40px 20px;
+        padding: 40px 20px 80px;
+        justify-content: flex-start;
+    }
+    
+    .menu-nav {
+        padding-top: 20px; 
+        padding-bottom: 20px;
+        margin: auto 0; /* Automatically and smoothly centers the entire block as it expands/collapses */
     }
     
     .close-btn {
@@ -259,11 +292,16 @@
     }
 
     .menu-link {
-        font-size: 20px;
+        font-size: 15px; /* Reduced to fit long words like CIRE CONGLOMERATE */
     }
 
     .menu-label {
-        font-size: 20px;
+        font-size: 15px;
+    }
+
+    .shop-sublink.elegant {
+        font-size: 13px; /* Reduced so items like HOUSE OF CROWNS fit */
+        margin-bottom: 15px;
     }
 
     .menu-social-icons {
@@ -283,4 +321,39 @@
     .menu-newsletter {
         padding: 15px 0 20px;
     }
+}
+
+/* Continuum Coming Soon Overlay */
+.continuum-link {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.continuum-link::after {
+    content: attr(data-hover);
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(20, 20, 20, 0.85) 0%, rgba(0, 0, 0, 0.95) 100%);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    letter-spacing: 6px;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: all 0.4s cubic-bezier(.22,.61,.36,1);
+    pointer-events: none;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.05);
+    text-shadow: 0 0 15px rgba(255, 215, 170, 0.4);
+}
+
+.continuum-link:hover::after {
+    opacity: 1;
+    transform: scale(1);
 }

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { useCart } from '../context/CartContext'
 import './ProductDisplay.scss'
+import InteractiveViewer from './InteractiveViewer'
 
 const Dropdown = ({ label, options, selected, onSelect, renderOption, disabledOption }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -37,7 +38,7 @@ const Dropdown = ({ label, options, selected, onSelect, renderOption, disabledOp
     );
 };
 
-function ProductDisplay({ product, sectionLogo, reversed = false }) {
+function ProductDisplay({ id, product, sectionLogo, reversed = false }) {
     const sectionRef = useRef(null)
     const imageRef = useRef(null)
     const titleRef = useRef(null)
@@ -46,6 +47,7 @@ function ProductDisplay({ product, sectionLogo, reversed = false }) {
     const purchaseRef = useRef(null)
     const addToCartBtnRef = useRef(null)
     const [hasAnimated, setHasAnimated] = useState(false)
+    const [isInView, setIsInView] = useState(false)
     const [isAdding, setIsAdding] = useState(false)
     const { addToCart } = useCart()
 
@@ -70,11 +72,11 @@ function ProductDisplay({ product, sectionLogo, reversed = false }) {
 
     const sizes = product.sizes || defaultSizes
     const specs = product.specs || defaultSpecs
-    const colors = product.colors || defaultColors
+    const colors = [...(product.colors || defaultColors)].sort()
     const isStatesman = product.title === 'The Statesman' || product.id === 'dominion'
 
     const [selectedSize, setSelectedSize] = useState(
-        sizes.find(s => !s.soldOut)?.size || 'M'
+        sizes.find(s => !s.soldOut && s.size === 'L')?.size || sizes.find(s => !s.soldOut)?.size || 'L'
     )
     const [selectedColor, setSelectedColor] = useState(colors[0])
     const [selectedFit, setSelectedFit] = useState('Classic')
@@ -88,10 +90,36 @@ function ProductDisplay({ product, sectionLogo, reversed = false }) {
 
     const images = product.images || [product.image || "/placeholder.svg", "/placeholder.svg", "/placeholder.svg"]
 
+    // Sync image carousel with selected color
+    useEffect(() => {
+        if (!selectedColor || !images || images.length === 0) return;
+        const colorLower = selectedColor.toLowerCase();
+        // Skip placeholder
+        if (images[0] === "/placeholder.svg") return;
+        
+        const firstMatchIndex = images.findIndex(img => typeof img === 'string' && img.toLowerCase().includes(colorLower));
+        if (firstMatchIndex !== -1) {
+            setCurrentImageIndex(firstMatchIndex);
+        }
+    }, [selectedColor, images]);
+
     // GSAP Scroll-triggered animations using Intersection Observer
     useEffect(() => {
         const section = sectionRef.current
         if (!section || hasAnimated) return
+
+        const loadObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        setIsInView(true)
+                        loadObserver.disconnect()
+                    }
+                })
+            },
+            { rootMargin: '150% 0px' }
+        )
+        loadObserver.observe(section)
 
         const observer = new IntersectionObserver(
             (entries) => {
@@ -141,7 +169,10 @@ function ProductDisplay({ product, sectionLogo, reversed = false }) {
 
         observer.observe(section)
 
-        return () => observer.disconnect()
+        return () => {
+            observer.disconnect()
+            loadObserver.disconnect()
+        }
     }, [reversed, hasAnimated])
 
     const handlePrev = () => {
@@ -152,8 +183,10 @@ function ProductDisplay({ product, sectionLogo, reversed = false }) {
         setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1))
     }
 
+    const productId = id || (product.title ? product.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') : '');
+
     return (
-        <div className="product-display-section" ref={sectionRef}>
+        <div className="product-display-section" ref={sectionRef} id={productId}>
             <div className={`product-container ${reversed ? 'reversed' : ''}`}>
                 {/* Left Side - Image Carousel */}
                 <div className="product-visual" ref={imageRef}>
@@ -162,16 +195,18 @@ function ProductDisplay({ product, sectionLogo, reversed = false }) {
                         <div className="product-image-wrapper">
                             {/* Placeholder div if we don't have real images yet */}
                             <div className="placeholder-image-bg">
-                                {images[currentImageIndex].endsWith('.html') ? (
-                                    <iframe 
-                                        src={images[currentImageIndex]} 
-                                        title={`${product.title} 360 Viewer`}
-                                        className="product-image iframe-viewer"
-                                        style={{ border: 'none', width: '100%', height: '100%', pointerEvents: 'auto' }}
-                                        scrolling="no"
-                                    />
-                                ) : (
-                                    <img src={images[currentImageIndex]} alt={product.title} className="product-image" />
+                                {isInView && (
+                                    images && images.length > 0 ? (
+                                        typeof images[currentImageIndex] === 'object' && images[currentImageIndex].is360 ? (
+                                            <InteractiveViewer key={currentImageIndex} frames={images[currentImageIndex].frames} />
+                                        ) : (
+                                            <img src={images[currentImageIndex]} alt={product.title} className="product-image" />
+                                        )
+                                    ) : (
+                                        <div className="product-image placeholder-fallback" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#000', height: '100%' }}>
+                                            {sectionLogo && <img src={sectionLogo} alt="Placeholder Logo" style={{ width: '40%', opacity: 0.3, filter: 'grayscale(100%) brightness(150%)' }} />}
+                                        </div>
+                                    )
                                 )}
                             </div>
                             {sectionLogo && (
@@ -198,7 +233,7 @@ function ProductDisplay({ product, sectionLogo, reversed = false }) {
                 </div>
 
                 {/* Right Side - Details */}
-                <div className="product-details" data-scroll data-scroll-speed="2">
+                <div className="product-details">
                     {/* Watermark Logo - positioned above title */}
                     {/* Title Group - animates together */}
                     <div className="title-group" ref={titleRef}>
@@ -233,39 +268,39 @@ function ProductDisplay({ product, sectionLogo, reversed = false }) {
                                 )}
                                 <Dropdown 
                                     label="Fit" 
-                                    options={product.suitSizing.fits} 
+                                    options={[...product.suitSizing.fits].sort()} 
                                     selected={selectedFit} 
                                     onSelect={setSelectedFit} 
                                 />
                                 <Dropdown 
                                     label="Jacket Fit" 
-                                    options={product.suitSizing.jacketFits} 
+                                    options={[...product.suitSizing.jacketFits].sort()} 
                                     selected={selectedJacketFit} 
                                     onSelect={setSelectedJacketFit} 
                                 />
                                 <Dropdown 
                                     label="Jacket Size" 
-                                    options={product.suitSizing.jacketSizes} 
+                                    options={[...product.suitSizing.jacketSizes].sort()} 
                                     selected={selectedJacketSize} 
                                     onSelect={setSelectedJacketSize} 
                                 />
                                 {product.suitSizing.vestSizes && (
                                     <Dropdown 
                                         label="Vest Size" 
-                                        options={product.suitSizing.vestSizes} 
+                                        options={[...product.suitSizing.vestSizes].sort()} 
                                         selected={selectedVestSize} 
                                         onSelect={setSelectedVestSize} 
                                     />
                                 )}
                                 <Dropdown 
                                     label="Pant Waist" 
-                                    options={product.suitSizing.pantWaist} 
+                                    options={[...product.suitSizing.pantWaist].sort()} 
                                     selected={selectedPantWaist} 
                                     onSelect={setSelectedPantWaist} 
                                 />
                                 <Dropdown 
                                     label="Pant Length" 
-                                    options={product.suitSizing.pantLength} 
+                                    options={[...product.suitSizing.pantLength].sort()} 
                                     selected={selectedPantLength} 
                                     onSelect={setSelectedPantLength} 
                                 />
@@ -322,36 +357,80 @@ function ProductDisplay({ product, sectionLogo, reversed = false }) {
 
                     {/* Specs Group - animates together */}
                     <div className="specs-group" ref={specsRef}>
-                        {product.specsColumns ? (
-                            <div className="product-specs-columns">
-                                {Array.isArray(product.specsColumns) && product.specsColumns.map((col, index) => (
-                                    <div key={index} className="specs-column">
-                                        {col.header && <h4>{col.header}</h4>}
-                                        <ul>
-                                            {col.items?.map((item, itemIndex) => {
-                                                const isObject = typeof item === 'object';
-                                                const text = isObject ? item.text : item;
-                                                const isIndented = isObject ? item.indent : false;
-                                                return (
-                                                    <li
-                                                        key={itemIndex}
-                                                        className={isIndented ? 'indented' : ''}
-                                                    >
-                                                        {text}
-                                                    </li>
-                                                );
-                                            })}
+                        {/* DESKTOP SPECS */}
+                        <div className="desktop-specs">
+                            {product.specsColumns ? (
+                                <div className="product-specs-columns">
+                                    {Array.isArray(product.specsColumns) && product.specsColumns.map((col, index) => (
+                                        <div key={index} className="specs-column">
+                                            {col.header && <h4>{col.header}</h4>}
+                                            <ul>
+                                                {col.items?.map((item, itemIndex) => {
+                                                    const isObject = typeof item === 'object';
+                                                    const text = isObject ? item.text : item;
+                                                    const isIndented = isObject ? item.indent : false;
+                                                    return (
+                                                        <li
+                                                            key={itemIndex}
+                                                            className={isIndented ? 'indented' : ''}
+                                                        >
+                                                            {text}
+                                                        </li>
+                                                    );
+                                                })}
+                                            </ul>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <ul className="product-specs">
+                                    {specs.map((spec, index) => (
+                                        <li key={index}>{spec}</li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
+
+                        {/* MOBILE SPECS */}
+                        <div className="mobile-specs">
+                            {product.specsColumns ? (
+                                <div className="product-specs-columns">
+                                    {Array.isArray(product.specsColumns) && product.specsColumns.map((col, index) => (
+                                        <details key={index} className="specs-column spec-accordion">
+                                            <summary>{col.header || 'Details'}</summary>
+                                            <div className="accordion-content">
+                                                <ul>
+                                                    {col.items?.map((item, itemIndex) => {
+                                                        const isObject = typeof item === 'object';
+                                                        const text = isObject ? item.text : item;
+                                                        const isIndented = isObject ? item.indent : false;
+                                                        return (
+                                                            <li
+                                                                key={itemIndex}
+                                                                className={isIndented ? 'indented' : ''}
+                                                            >
+                                                                {text}
+                                                            </li>
+                                                        );
+                                                    })}
+                                                </ul>
+                                            </div>
+                                        </details>
+                                    ))}
+                                </div>
+                            ) : (
+                                <details className="specs-column spec-accordion">
+                                    <summary>Details</summary>
+                                    <div className="accordion-content">
+                                        <ul className="product-specs">
+                                            {specs.map((spec, index) => (
+                                                <li key={index}>{spec}</li>
+                                            ))}
                                         </ul>
                                     </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <ul className="product-specs">
-                                {specs.map((spec, index) => (
-                                    <li key={index}>{spec}</li>
-                                ))}
-                            </ul>
-                        )}
+                                </details>
+                            )}
+                        </div>
                     </div>
 
                     {/* Purchase Group - animates from bottom */}

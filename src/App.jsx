@@ -12,6 +12,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/shop" element={<Shop />} />
+                    <Route path="/shop/:productId" element={<Shop />} />
                 </Routes>
             </GridProvider>
         </CartProvider>

@@ -98,7 +98,7 @@
             rgba(255, 255, 255, 0.03) 60%,
             transparent 65%,
             transparent 100%);
-    animation: ambientSheen 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    animation: ambientSheen 6s cubic-bezier(.22,.61,.36,1) infinite;
     animation-delay: var(--sheen-delay, 0s);
     transform: skewX(-10deg);
     will-change: left, opacity;
@@ -164,7 +164,7 @@
     opacity: 0;
     transform: translateY(30px);
     transform: translateY(30px);
-    transition: opacity 1s ease 0.2s, transform 0.5s ease;
+    transition: opacity 1s cubic-bezier(.22,.61,.36,1) 0.2s, transform 0.5s cubic-bezier(.22,.61,.36,1);
     padding: 40px;
 }
 
@@ -223,27 +223,32 @@
     .cards-container {
         width: 85%;
         max-width: 320px;
-        height: 178px; /* Correct aspect ratio for mobile */
+        height: 200px; /* Drastically reduced to orient as a landscape rectangle */
+        margin-top: 0; /* Removed margin-top to ensure true vertical centering */
     }
 
     .card-title {
-        font-size: 20px; /* Scaled down proportionally */
-        letter-spacing: 4px;
-        margin-bottom: 12px;
+        font-size: 18px; /* Reduced text size */
+        letter-spacing: 3px;
+        margin-bottom: 5px;
     }
 
     .card-subtitle {
-        font-size: 11px;
+        font-size: 10px; /* Reduced text size */
         letter-spacing: 2px;
-        margin-bottom: 12px;
+        margin-bottom: 5px;
+        background: none; /* Remove gradient for legibility */
+        -webkit-text-fill-color: initial;
+        color: #f0f0f0; /* Solid color for mobile legibility */
     }
 
     .card-description {
-        font-size: 8px;
+        font-size: 9px; /* Reduced text size */
+        line-height: 1.4;
     }
     
     .card-content {
-        padding: 20px; /* Less padding on small cards */
+        padding: 20px; 
     }
 }
 
@@ -255,7 +260,7 @@
     overflow: hidden;
     pointer-events: none;
     /* Pass clicks through */
-    animation: subtleDrift 8s ease-in-out infinite;
+    animation: subtleDrift 8s cubic-bezier(.22,.61,.36,1) infinite;
 }
 
 .overlay-glow {

@@ -25,7 +25,7 @@ function HouseOfCrowns({ number }) {
                         setHasAnimated(true)
 
                         // Custom ease: resists at start like heavy doors overcoming inertia
-                        const heavyEase = 'cubic-bezier(0.12, 0.02, 0.1, 1)'
+                        const heavyEase = 'cubic-bezier(.22,.61,.36,1)'
 
                         // Gates open - 3 seconds total
                         gsap.to(gateLeftRef.current, {

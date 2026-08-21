@@ -6,15 +6,17 @@ function LogoIntro({ onComplete }) {
     const [animating, setAnimating] = useState(true)
 
     useEffect(() => {
-        // Logo holds for 30% of 4s (1.2s), then animates out
+        // Logo holds for 1.2s, then shrinks and flies up.
+        // At 2.5s, the logo is completely out of frame. We fade out the background
+        // AND trigger onComplete so the header appears and the card slider begins cycling.
         const animationTimer = setTimeout(() => {
             setAnimating(false)
+            if (onComplete) onComplete()
         }, 2500)
 
-        // Remove intro after animation + fade out
+        // Completely unmount the intro component after the 0.3s fade-out completes
         const removeTimer = setTimeout(() => {
             setVisible(false)
-            if (onComplete) onComplete()
         }, 2800)
 
         return () => {

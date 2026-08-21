@@ -45,10 +45,10 @@ function Home() {
             <div className="bg-specs"></div>
 
             {/* Startup Logo Animation */}
-            {!introComplete && <LogoIntro onComplete={handleIntroComplete} />}
+            <LogoIntro onComplete={handleIntroComplete} />
 
-            {/* Main Content - visible after intro */}
-            <Header onMenuClick={toggleMenu} />
+            {/* Main Content - always rendered but hidden until intro completes */}
+            <Header onMenuClick={toggleMenu} isVisible={introComplete} />
             <MenuOverlay
                 isOpen={menuOpen}
                 onClose={toggleMenu}

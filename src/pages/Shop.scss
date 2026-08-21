@@ -11,6 +11,9 @@
     color: var(--text-color);
     font-family: 'Inter', sans-serif;
     overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+    scroll-behavior: smooth;
 
     .shop-left-nav {
         position: fixed;
@@ -18,11 +21,10 @@
         top: 50%;
         transform: translateY(-50%) scale(0.6); /* Discretely scaled down by default */
         @media (max-width: 768px) {
-            transform: translateY(-50%) scale(0.45); /* Even smaller by default on mobile */
-            left: 2px;
+            display: none; /* Replaced by MobileBottomSheet */
         }
         transform-origin: left center;
-        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.4s ease, box-shadow 0.4s ease;
+        transition: transform 0.4s cubic-bezier(.22,.61,.36,1), background 0.4s cubic-bezier(.22,.61,.36,1), box-shadow 0.4s cubic-bezier(.22,.61,.36,1);
         z-index: 9999;
         pointer-events: auto;
         padding: 20px 12px; /* Tight padding to only house notches */
@@ -47,7 +49,7 @@
                 position: relative;
                 display: flex;
                 align-items: center;
-                transition: transform 0.2s ease;
+                transition: transform 0.2s cubic-bezier(.22,.61,.36,1);
                 transform-origin: left center;
                 padding: 15px 0; // Healthy vertical spacing so content isn't jumbled
 
@@ -59,7 +61,7 @@
                     background-color: rgba(255, 255, 255, 0.6); // Much brighter default
                     box-shadow: 0 0 8px rgba(255, 255, 255, 0.4); // Illumination
                     margin-right: 0; // Removed margin to keep bubble tight
-                    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+                    transition: background-color 0.3s cubic-bezier(.22,.61,.36,1), transform 0.3s cubic-bezier(.22,.61,.36,1), box-shadow 0.3s cubic-bezier(.22,.61,.36,1);
                 }
 
                 &.active::before {
@@ -78,7 +80,7 @@
                     text-transform: uppercase;
                     opacity: 0;
                     transform: translateX(-15px);
-                    transition: all 0.3s ease;
+                    transition: all 0.3s cubic-bezier(.22,.61,.36,1);
                     pointer-events: none;
                     white-space: nowrap;
                 }
@@ -122,10 +124,14 @@
 
     .main-container {
         padding-bottom: 100px;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+        position: relative;
     }
 
     .section {
-        min-height: 100vh;
+        min-height: 100svh;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -135,6 +141,13 @@
         }
         position: relative;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+        &.hero {
+            @media (max-width: 768px) {
+                border-bottom: none;
+            }
+        }
+
 
         /* Tier-specific background colors from Sophisticated Ignorance */
         &.tier-foundations {
@@ -166,10 +179,15 @@
         &.hero {
             align-items: center;
             border-bottom: none;
-            padding-top: 70px;
+            padding-top: 110px;
             padding-bottom: 40px;
 
-            h1 {
+            @media (max-width: 768px) {
+                padding-top: 80px;
+                padding-bottom: 20px;
+            }
+
+            .hero-title {
                 font-family: 'Syncopate', sans-serif;
                 font-size: 8vw;
                 text-align: center;
@@ -177,15 +195,28 @@
                 margin: 0;
                 font-weight: 700;
                 letter-spacing: -2px;
+
+                @media (max-width: 768px) {
+                    font-size: 32px;
+                    letter-spacing: 0;
+                    line-height: 1.1;
+                    margin-bottom: 10px;
+                }
             }
 
-            p {
+            .hero-epithet {
                 font-family: 'Inter', sans-serif;
                 margin-top: 5px;
                 font-size: 1.1rem;
                 letter-spacing: 4px;
                 text-transform: uppercase;
                 color: #888;
+
+                @media (max-width: 768px) {
+                    font-size: 12px;
+                    letter-spacing: 0.18em;
+                    line-height: 1.4;
+                }
             }
 
             .hero-image {
@@ -197,6 +228,13 @@
                 opacity: 0.9;
                 position: relative;
                 z-index: 0;
+
+                @media (max-width: 768px) {
+                    margin-top: 0px;
+                    margin-bottom: 0px;
+                    padding: 20px 0;
+                    width: 80%;
+                }
             }
 
             .hero-body {
@@ -208,7 +246,27 @@
                 color: #999;
                 text-align: center;
                 font-weight: 300;
+
+                @media (max-width: 768px) {
+                    font-size: 14px;
+                    line-height: 1.7;
+                    letter-spacing: 0.04em;
+                    padding: 0 10px;
+                }
             }
+        }
+    }
+
+    .mobile-category-intro-wrapper {
+        display: none;
+    }
+
+    @media (max-width: 768px) {
+        .desktop-category-intro {
+            display: none;
+        }
+        .mobile-category-intro-wrapper {
+            display: block;
         }
     }
 

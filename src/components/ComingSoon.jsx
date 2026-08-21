@@ -46,13 +46,14 @@ const ComingSoon = ({ sectionTitle }) => {
         const height = dimensionsRef.current.height
 
         // Initialize stars only once
-        const numStars = 500
+        const isMobile = width < 768
+        const numStars = isMobile ? 120 : 250 // Reduced density for luxury feel
         for (let i = 0; i < numStars; i++) {
             starsRef.current.push({
                 x: Math.random() * width,
                 y: Math.random() * height,
-                size: Math.random() * 1.8 + 0.3,
-                baseBrightness: Math.random() * 0.4 + 0.1,
+                size: Math.random() * 1.5 + 0.2, // Slightly smaller stars
+                baseBrightness: Math.random() * 0.3 + 0.1, // Softer base brightness
                 twinkleSpeed: Math.random() * 0.002 + 0.001,
                 twinkleOffset: Math.random() * Math.PI * 2
             })
@@ -72,6 +73,13 @@ const ComingSoon = ({ sectionTitle }) => {
             const { width, height } = dimensionsRef.current
             const centerX = width / 2
             const centerY = height / 2
+
+            // Mobile-specific adjustments
+            const isMobile = width < 768
+            const baseSpeed = isMobile ? 3 : 6
+            const speedVariance = isMobile ? 2 : 4
+            const baseLength = isMobile ? 40 : 80
+            const lengthVariance = isMobile ? 30 : 60
 
             switch (side) {
                 case 0: // top
@@ -99,8 +107,8 @@ const ComingSoon = ({ sectionTitle }) => {
                 x: startX,
                 y: startY,
                 angle: angle,
-                speed: 6 + Math.random() * 4,
-                length: 80 + Math.random() * 60,
+                speed: baseSpeed + Math.random() * speedVariance,
+                length: baseLength + Math.random() * lengthVariance,
                 brightness: 1,
                 active: true
             }
