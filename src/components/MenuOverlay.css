@@ -12,10 +12,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    padding: 60px 20px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    padding: 0; /* padding moved to scroll container and newsletter */
+    overflow: hidden; /* Important: disable main scroll, let container scroll */
+    overflow-x: hidden;
 }
 
 .menu-overlay.open {
@@ -25,7 +24,7 @@
 
 .close-btn {
     position: absolute;
-    top: 90px;
+    top: 50px;
     right: 40px;
     background: none;
     border: none;
@@ -39,13 +38,27 @@
     color: #ccc;
 }
 
+/* Scroll Container wrapping the navigation */
+.menu-scroll-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+}
+.menu-scroll-container::before,
+.menu-scroll-container::after {
+    content: '';
+    margin: auto;
+}
+
 .menu-nav {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
     gap: 20px;
-    padding: 10vh 0 120px;
+    padding: 100px 20px; /* Perfectly symmetrical padding ensures exact vertical centering */
     width: 100%;
 }
 
@@ -208,21 +221,17 @@
     transform: scale(1.15);
 }
 
-/* Newsletter Section */
+/* Newsletter Section - Fixed at very bottom */
 .menu-newsletter {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 12px;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
     width: 100%;
-    padding: 20px 0 40px;
+    padding: 20px 20px 40px;
     background-color: #000;
-    /* Backdrop fill */
-    z-index: 10;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
 }
 
 .newsletter-label {
@@ -275,14 +284,11 @@
 /* Mobile Responsive */
 @media (max-width: 768px) {
     .menu-overlay {
-        padding: 40px 20px 80px;
-        justify-content: flex-start;
+        padding: 0;
     }
     
     .menu-nav {
-        padding-top: 20px; 
-        padding-bottom: 20px;
-        margin: auto 0; /* Automatically and smoothly centers the entire block as it expands/collapses */
+        margin: 0; /* Let flex auto margins handle centering */
     }
     
     .close-btn {

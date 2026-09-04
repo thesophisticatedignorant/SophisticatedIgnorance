@@ -28,6 +28,10 @@
     pointer-events: auto;
 }
 
+.header.minimal {
+    height: 80px;
+}
+
 /* Centered logo container */
 .logo-container {
     position: absolute;
@@ -39,16 +43,20 @@
 }
 
 .logo-container a {
-    display: block;
-    width: 100%;
-    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 30px; /* Highly constrained to just the text of the logo */
+    position: relative;
     pointer-events: auto;
 }
 
 .header-logo {
-    height: 200px;
+    position: absolute;
+    height: 200px; /* Visual size remains large */
     width: auto;
-    cursor: pointer;
+    pointer-events: none; /* Ignore clicks on the outer transparent edges of the SVG */
 }
 
 /* Right side container */
@@ -91,12 +99,22 @@
         padding: 5px 20px; /* Uniform padding for perfect vertical centering */
         height: 110px;
     }
+    
+    .header.minimal {
+        height: 70px;
+    }
 
     .logo-container {
         height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
+        margin-top: -15px; /* Shift the entire container (hitbox AND image) up */
+    }
+
+    .logo-container a {
+        width: 180px;
+        height: 40px; /* Constrain mobile hit area too */
     }
 
     .header-logo {
@@ -104,6 +122,6 @@
         width: auto;
         max-width: 90vw;
         object-fit: contain;
-        margin-top: -25px; /* Visual adjustment to align center with menu/cart icons */
+        /* margin removed so image stays perfectly centered in hitbox */
     }
 }

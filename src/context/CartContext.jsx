@@ -35,7 +35,7 @@ export function CartProvider({ children }) {
         setCartItems(prev => {
             const existing = prev.find(i => i.id === item.id)
             if (existing) {
-                return prev.map(i => i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i)
+                return prev.map(i => i.id === item.id ? { ...i, quantity: i.quantity + 1, image: item.image } : i)
             }
             return [...prev, { ...item, quantity: 1 }]
         })

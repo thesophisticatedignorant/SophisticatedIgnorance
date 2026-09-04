@@ -5,7 +5,7 @@ function CartButton() {
     const { cartCount, openCart } = useCart()
 
     return (
-        <button className="cart-btn" aria-label="Cart" onClick={openCart}>
+        <button className="cart-btn" aria-label="Request List" onClick={openCart}>
             <svg
                 viewBox="0 0 24 24"
                 fill="none"
@@ -13,8 +13,11 @@ function CartButton() {
                 strokeWidth="1.5"
                 className="cart-icon"
             >
-                <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
-                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                <path d="M9 14h6" />
+                <path d="M9 18h6" />
+                <path d="M9 10h6" />
             </svg>
             {cartCount > 0 && (
                 <span className="cart-count">{cartCount}</span>

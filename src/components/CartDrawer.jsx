@@ -61,7 +61,7 @@ function CartDrawer() {
             />
             <div className={`cart-drawer ${isCartOpen ? 'open' : ''}`} ref={drawerRef}>
                 <div className="cart-header">
-                    <h2>YOUR BAG ({cartCount})</h2>
+                    <h2>REQUEST LIST ({cartCount})</h2>
                     <button className="close-btn" onClick={closeCart} aria-label="Close cart">
                         ×
                     </button>
@@ -70,7 +70,7 @@ function CartDrawer() {
                 <div className="cart-content" ref={contentRef}>
                     {cartItems.length === 0 ? (
                         <div className="cart-empty">
-                            <p>Your shopping bag is empty</p>
+                            <p>Your request list is empty</p>
                         </div>
                     ) : (
                         <>
@@ -118,11 +118,14 @@ function CartDrawer() {
                                     <span>TOTAL</span>
                                     <span>${calculateTotal()}</span>
                                 </div>
-                                <button className="checkout-btn">
-                                    PROCEED TO CHECKOUT
+                                <button className="checkout-btn" onClick={() => {
+                                    closeCart();
+                                    window.location.href = '/request-review';
+                                }}>
+                                    SUBMIT REQUEST
                                 </button>
                                 <button className="continue-btn" onClick={closeCart}>
-                                    CONTINUE SHOPPING
+                                    CONTINUE BROWSING
                                 </button>
                             </div>
                         </>

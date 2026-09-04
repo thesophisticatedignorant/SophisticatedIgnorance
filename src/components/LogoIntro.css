@@ -21,7 +21,7 @@
     width: 83.33%;
     max-width: 800px;
     height: auto;
-    animation: logoIntro 4s ease-in-out forwards;
+    animation: logoIntro 2.5s ease-in-out forwards;
 }
 
 /* The animation that shrinks logo and moves it up to header position */
@@ -44,7 +44,7 @@
 
 @media (max-width: 768px) {
     .logo-intro-image {
-        animation: logoIntroMobile 4s ease-in-out forwards;
+        animation: logoIntroMobile 2.5s ease-in-out forwards;
     }
 }
 

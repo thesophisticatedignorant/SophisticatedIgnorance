@@ -456,7 +456,9 @@ function ProductDisplay({ id, product, sectionLogo, reversed = false }) {
                                     color: selectedColor,
                                     size: product.suitSizing ? `${selectedJacketSize} / ${selectedPantWaist}x${selectedPantLength}` : selectedSize,
                                     quantity: quantity,
-                                    image: sectionLogo
+                                    image: (images && images.length > 0) 
+                                        ? (typeof images[currentImageIndex] === 'object' && images[currentImageIndex].is360 ? images[currentImageIndex].frames[0] : images[currentImageIndex]) 
+                                        : sectionLogo
                                 })
 
                                 // Button animation
@@ -472,7 +474,7 @@ function ProductDisplay({ id, product, sectionLogo, reversed = false }) {
                             }}
                             disabled={isAdding}
                         >
-                            <span className="btn-text">{isAdding ? 'ADDED TO BAG' : 'ADD TO BAG'}</span>
+                            <span className="btn-text">{isAdding ? 'ACCESS REQUESTED' : 'REQUEST ACCESS'}</span>
                         </button>
                     </div>
                 </div>

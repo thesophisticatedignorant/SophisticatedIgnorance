@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import './Header.css'
 import CartButton from './CartButton'
 
-function Header({ onMenuClick, isVisible = true }) {
+function Header({ onMenuClick, isVisible = true, isMinimal = false }) {
     const [scrolled, setScrolled] = useState(false);
 
     useEffect(() => {
@@ -16,13 +16,15 @@ function Header({ onMenuClick, isVisible = true }) {
     }, []);
 
     return (
-        <header className={`header ${isVisible ? 'visible' : 'hidden'} ${scrolled ? 'scrolled' : 'transparent'}`}>
+        <header className={`header ${isVisible ? 'visible' : 'hidden'} ${scrolled ? 'scrolled' : 'transparent'} ${isMinimal ? 'minimal' : ''}`}>
             {/* Menu Button */}
-            <button className="menu-btn" onClick={onMenuClick}>
-                <span className="menu-line"></span>
-                <span className="menu-line"></span>
-                <span className="menu-line"></span>
-            </button>
+            {!isMinimal && (
+                <button className="menu-btn" onClick={onMenuClick}>
+                    <span className="menu-line"></span>
+                    <span className="menu-line"></span>
+                    <span className="menu-line"></span>
+                </button>
+            )}
 
             {/* Centered Logo */}
             <div className="logo-container">
@@ -33,9 +35,11 @@ function Header({ onMenuClick, isVisible = true }) {
 
             {/* Placeholder for right side - for balance */}
             {/* Cart Button */}
-            <div className="header-right">
-                <CartButton />
-            </div>
+            {!isMinimal && (
+                <div className="header-right">
+                    <CartButton />
+                </div>
+            )}
         </header>
     )
 }
