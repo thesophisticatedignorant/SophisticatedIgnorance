@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { 
     GoogleAuthProvider, 
     OAuthProvider, 
-    signInWithPopup, 
+    signInWithRedirect, 
     signOut, 
     onAuthStateChanged 
 } from 'firebase/auth';
@@ -42,7 +42,7 @@ export function AuthProvider({ children }) {
     const signInWithGoogle = async () => {
         const provider = new GoogleAuthProvider();
         try {
-            await signInWithPopup(auth, provider);
+            await signInWithRedirect(auth, provider);
         } catch (error) {
             console.error("Error signing in with Google:", error);
             throw error;
@@ -52,7 +52,7 @@ export function AuthProvider({ children }) {
     const signInWithApple = async () => {
         const provider = new OAuthProvider('apple.com');
         try {
-            await signInWithPopup(auth, provider);
+            await signInWithRedirect(auth, provider);
         } catch (error) {
             console.error("Error signing in with Apple:", error);
             throw error;

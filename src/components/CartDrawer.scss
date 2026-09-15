@@ -287,8 +287,9 @@
             padding: 15px 20px;
             
             .close-btn {
-                position: relative;
-                top: -5px; /* Raise the X button */
+                position: absolute;
+                top: 15px;
+                right: 15px;
             }
         }
 

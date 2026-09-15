@@ -63,7 +63,7 @@ export const sections = [
                 id: 'the-breakaway',
                 name: 'The Breakaway',
                 epithet: 'Transformation in motion.',
-                price: '150',
+                price: '180',
                 images: [
                     '/Ghost Mannequins/Foundations/The Breakaway/Amethyst/Breakaway Amethyst Hoodie Front.png',
                     '/Ghost Mannequins/Foundations/The Breakaway/Amethyst/Breakaway Amethyst Hoodie Front Zoomed.png',
@@ -142,7 +142,7 @@ export const sections = [
                 id: 'the-contradiction',
                 name: 'The Contradiction',
                 epithet: 'Elegance built on chaos.',
-                price: '420',
+                price: '1200',
                 images: [
                     {
                         is360: true,
@@ -216,7 +216,7 @@ export const sections = [
                 id: 'the-intersect',
                 name: 'The Intersect',
                 epithet: 'The worlds of asphalt and agility collide.',
-                price: '670',
+                price: '960',
                 colors: ['Multi'],
                 images: [
                     {
@@ -279,7 +279,7 @@ export const sections = [
                 id: 'the-creed',
                 name: 'The Creed',
                 epithet: 'Every strike makes a statement.',
-                price: '990',
+                price: '1270',
                 colors: ['Amethyst'],
                 sizes: [
                     { size: '12oz', soldOut: false },

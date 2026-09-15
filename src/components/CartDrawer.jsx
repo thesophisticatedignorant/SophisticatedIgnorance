@@ -1,9 +1,11 @@
 import { useRef, useEffect } from 'react'
 import { gsap } from 'gsap'
+import { useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import './CartDrawer.scss'
 
 function CartDrawer() {
+    const navigate = useNavigate()
     const { cartItems, removeFromCart, updateQuantity, isCartOpen, closeCart, cartCount } = useCart()
     const drawerRef = useRef(null)
     const overlayRef = useRef(null)
@@ -120,7 +122,7 @@ function CartDrawer() {
                                 </div>
                                 <button className="checkout-btn" onClick={() => {
                                     closeCart();
-                                    window.location.href = '/request-review';
+                                    navigate('/request-review');
                                 }}>
                                     SUBMIT REQUEST
                                 </button>

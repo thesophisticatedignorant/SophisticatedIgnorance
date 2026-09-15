@@ -60,7 +60,7 @@
     }
 
     100% {
-        transform: scale(0.2) translateY(-800%);
+        transform: scale(0.15) translateY(-1800%);
         opacity: 0;
     }
 }

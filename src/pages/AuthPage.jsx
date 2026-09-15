@@ -9,29 +9,32 @@ function AuthPage() {
     const location = useLocation();
 
     // After login, redirect to where they came from or home
-    const from = location.state?.from?.pathname || '/';
+    const from = location.state?.from?.pathname || sessionStorage.getItem('authRedirectPath') || '/';
 
     useEffect(() => {
         if (user) {
+            sessionStorage.removeItem('authRedirectPath');
             navigate(from, { replace: true });
         }
     }, [user, navigate, from]);
 
     const handleGoogleSignIn = async () => {
         try {
+            sessionStorage.setItem('authRedirectPath', from);
             await signInWithGoogle();
         } catch (error) {
-            // Error handling can be enhanced here
             console.error(error);
+            alert(`Authentication Error: ${error.message}\nMake sure your domain is added to Firebase Authorized Domains.`);
         }
     };
 
     const handleAppleSignIn = async () => {
         try {
+            sessionStorage.setItem('authRedirectPath', from);
             await signInWithApple();
         } catch (error) {
-            // Error handling can be enhanced here
             console.error(error);
+            alert(`Authentication Error: ${error.message}\nMake sure your domain is added to Firebase Authorized Domains.`);
         }
     };
 

@@ -113,11 +113,11 @@ function MenuOverlay({ isOpen, onClose, scrollToSection }) {
                     </div>
 
                     <a href="https://cireconglomerate.com" target="_blank" rel="noopener noreferrer" className="menu-link">CIRE CONGLOMERATE</a>
-                    <a href="#the-continuum" className="menu-link continuum-link" data-hover="COMING SOON">THE CONTINUUM</a>
+                    <div className="menu-link continuum-link" data-hover="COMING SOON">THE CONTINUUM</div>
                     
                     {user ? (
                         <>
-                            {user.email === 'cireconglomerate@gmail.com' && (
+                            {user.email === atob('Y2lyZWNvbmdsb21lcmF0ZUBnbWFpbC5jb20=') && (
                                 <a href="/house-admin" className="menu-link" onClick={(e) => { e.preventDefault(); navigate('/house-admin'); onClose(); }}>HOUSE ADMIN</a>
                             )}
                             <a href="/dashboard" className="menu-link" onClick={(e) => { e.preventDefault(); navigate('/dashboard'); onClose(); }}>MY ACCOUNT</a>

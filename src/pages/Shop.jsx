@@ -8,7 +8,7 @@ import HouseOfCrowns from '../components/HouseOfCrowns'
 import ComingSoon from '../components/ComingSoon'
 import Header from '../components/Header'
 import MenuOverlay from '../components/MenuOverlay'
-import CartDrawer from '../components/CartDrawer'
+
 import MobileCategoryIntro from '../components/MobileCategoryIntro'
 import MobileBottomSheet from '../components/MobileBottomSheet'
 import { useCart } from '../context/CartContext'
@@ -106,17 +106,22 @@ function Shop() {
     // Resize preservation logic
     useEffect(() => {
         let resizeTimeout;
+        let lastWidth = window.innerWidth;
         const handleResize = () => {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(() => {
-                const targetId = sessionStorage.getItem('lastActiveSlug');
-                if (targetId) {
-                    const target = document.getElementById(targetId);
-                    if (target) {
-                        window.scrollTo({
-                            top: target.offsetTop,
-                            behavior: 'instant'
-                        });
+                const currentWidth = window.innerWidth;
+                if (currentWidth !== lastWidth) {
+                    lastWidth = currentWidth;
+                    const targetId = sessionStorage.getItem('lastActiveSlug');
+                    if (targetId) {
+                        const target = document.getElementById(targetId);
+                        if (target) {
+                            window.scrollTo({
+                                top: target.offsetTop,
+                                behavior: 'instant'
+                            });
+                        }
                     }
                 }
             }, 150);
@@ -144,8 +149,6 @@ function Shop() {
 
     return (
         <div className="shop-page">
-            <CartDrawer />
-            
             {/* Left Navigation Bar */}
             <nav 
                 className={`shop-left-nav desktop-only ${navOpen ? 'nav-open' : ''}`}

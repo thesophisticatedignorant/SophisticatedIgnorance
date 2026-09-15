@@ -60,17 +60,16 @@ const StarfieldBg = () => {
         const initWidth = window.innerWidth
         const initHeight = window.innerHeight
         const goldColors = ['#D6B36B', '#A37C3D', 'rgba(242,210,155,0.85)', '#C49A6C', '#B8860B']
-        const numFlakes = 200
-
         const isMobile = window.innerWidth < 768;
+        const numFlakes = isMobile ? 350 : 200;
         const driftMultiplier = isMobile ? 0.3 : 1;
 
         starsRef.current = Array.from({ length: numFlakes }).map(() => ({
             x: Math.random() * initWidth,
             y: Math.random() * initHeight,
-            size: Math.random() * 1.5 + 0.3,
+            size: (Math.random() * 1.5 + 0.3) * (isMobile ? 1.5 : 1),
             color: goldColors[Math.floor(Math.random() * goldColors.length)],
-            baseBrightness: Math.random() * 0.3 + 0.1,
+            baseBrightness: (Math.random() * 0.3 + 0.1) * (isMobile ? 1.5 : 1),
             shimmerSpeed: Math.random() * 0.003 + 0.001,
             shimmerOffset: Math.random() * Math.PI * 2,
             driftX: (Math.random() - 0.5) * 0.02 * driftMultiplier,

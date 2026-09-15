@@ -9,6 +9,7 @@ import RequestReview from './pages/RequestReview'
 import RequestConfirmation from './pages/RequestConfirmation'
 import ClientDashboard from './pages/ClientDashboard'
 import HouseAdmin from './pages/HouseAdmin'
+import CartDrawer from './components/CartDrawer'
 import './App.css'
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <AuthProvider>
             <CartProvider>
                 <GridProvider>
+                    <CartDrawer />
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/shop" element={<Shop />} />

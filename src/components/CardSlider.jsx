@@ -471,6 +471,7 @@ function CardSlider({ isActive, onCycleComplete }) {
                                             src={slide.image}
                                             alt={slide.title}
                                             draggable={false}
+                                            loading="eager"
                                             style={{
                                                 height: isMobile ? 'auto' : (imageScale * mobileScale) + 'px',
                                                 maxHeight: isMobile ? '200px' : 'none',
@@ -479,7 +480,9 @@ function CardSlider({ isActive, onCycleComplete }) {
                                                 cursor: isLocked ? 'pointer' : 'move',
                                                 pointerEvents: isMobile ? 'none' : 'auto',
                                                 display: 'block',
-                                                filter: 'drop-shadow(0 0 2px rgba(255,255,255,0.9))'
+                                                filter: 'drop-shadow(0 0 2px rgba(255,255,255,0.9))',
+                                                transform: 'translateZ(0)', /* Force compositing layer for Safari */
+                                                WebkitTransform: 'translateZ(0)'
                                             }}
                                             onClick={() => {
                                                 if (isMobile) navigate(slide.link);

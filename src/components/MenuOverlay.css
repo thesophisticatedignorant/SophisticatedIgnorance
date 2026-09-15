@@ -32,6 +32,7 @@
     font-size: 40px;
     cursor: pointer;
     line-height: 1;
+    z-index: 100;
 }
 
 .close-btn:hover {
@@ -57,8 +58,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
-    padding: 100px 20px; /* Perfectly symmetrical padding ensures exact vertical centering */
+    gap: 15px;
+    padding: 10px; /* Reduced padding to prevent unnecessary vertical scrolling on default view */
     width: 100%;
 }
 

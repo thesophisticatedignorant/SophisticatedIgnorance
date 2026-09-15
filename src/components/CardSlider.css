@@ -1,6 +1,6 @@
 .card-slider {
     width: 100%;
-    height: 100vh;
+    height: 100dvh;
     position: relative;
     overflow: hidden;
     display: flex;
@@ -25,6 +25,8 @@
     width: 32.2%;
     max-width: 362px;
     height: 201px;
+    user-select: none;
+    touch-action: none; /* Prevent native scroll, force use of slider */
     perspective: 1500px;
     perspective-origin: center center;
     transform-style: preserve-3d;
@@ -85,7 +87,7 @@
     content: '';
     position: absolute;
     top: -50%;
-    left: -120%;
+    left: 0;
     width: 100%;
     height: 200%;
     background: linear-gradient(110deg,
@@ -100,29 +102,29 @@
             transparent 100%);
     animation: ambientSheen 6s cubic-bezier(.22,.61,.36,1) infinite;
     animation-delay: var(--sheen-delay, 0s);
-    transform: skewX(-10deg);
-    will-change: left, opacity;
+    will-change: transform, opacity;
 }
 
 @keyframes ambientSheen {
-
     0%,
     15% {
-        left: -120%;
+        transform: translateX(-120%) skewX(-10deg);
         opacity: 0;
     }
 
     20% {
         opacity: 1;
+        transform: translateX(-100%) skewX(-10deg);
     }
 
     80% {
         opacity: 1;
+        transform: translateX(100%) skewX(-10deg);
     }
 
     85%,
     100% {
-        left: 120%;
+        transform: translateX(120%) skewX(-10deg);
         opacity: 0;
     }
 }
@@ -166,6 +168,8 @@
     transform: translateY(30px);
     transition: opacity 1s cubic-bezier(.22,.61,.36,1) 0.2s, transform 0.5s cubic-bezier(.22,.61,.36,1);
     padding: 40px;
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
 }
 
 .card.current .card-content {
@@ -220,6 +224,12 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+    .card {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6) !important;
+    }
+
     .cards-container {
         width: 85%;
         max-width: 320px;
@@ -261,6 +271,8 @@
     pointer-events: none;
     /* Pass clicks through */
     animation: subtleDrift 8s cubic-bezier(.22,.61,.36,1) infinite;
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
 }
 
 .overlay-glow {

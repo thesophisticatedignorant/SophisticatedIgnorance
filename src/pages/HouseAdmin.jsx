@@ -16,7 +16,7 @@ function HouseAdmin() {
 
     useEffect(() => {
         if (!loading) {
-            if (!user || user.email !== 'cireconglomerate@gmail.com') {
+            if (!user || user.email !== atob('Y2lyZWNvbmdsb21lcmF0ZUBnbWFpbC5jb20=')) {
                 navigate('/');
             }
         }
@@ -24,7 +24,7 @@ function HouseAdmin() {
 
     useEffect(() => {
         const fetchAllRequests = async () => {
-            if (!user || user.email !== 'cireconglomerate@gmail.com') return;
+            if (!user || user.email !== atob('Y2lyZWNvbmdsb21lcmF0ZUBnbWFpbC5jb20=')) return;
             try {
                 const q = query(collection(db, 'acquisitionRequests'), orderBy('createdAt', 'desc'));
                 const querySnapshot = await getDocs(q);
@@ -40,7 +40,7 @@ function HouseAdmin() {
             }
         };
 
-        if (user && user.email === 'cireconglomerate@gmail.com') {
+        if (user && user.email === atob('Y2lyZWNvbmdsb21lcmF0ZUBnbWFpbC5jb20=')) {
             fetchAllRequests();
         }
     }, [user]);
