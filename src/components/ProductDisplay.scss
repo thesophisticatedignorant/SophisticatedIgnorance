@@ -431,8 +431,6 @@
 
             .product-specs-columns {
                 display: flex;
-                flex-direction: row;
-                align-items: flex-start;
                 gap: 60px; // Tripled the spacing for standard/wide desktop view
                 margin-bottom: 30px;
                 width: 100%;
@@ -446,13 +444,15 @@
                     gap: 20px;
                 }
 
-                @media (max-width: 600px) {
+                @media (max-width: 850px) {
                     flex-direction: column;
+                    gap: 0;
                 }
 
                 .specs-column {
                     flex: 1;
-                    min-width: 0; // Essential for preventing text from forcing wider widths
+                    min-width: 0; // prevents overflow from pushing container width
+
                     h4 {
                         font-family: 'Syncopate', sans-serif;
                         font-size: 0.8rem; // Reduced to fit more info
