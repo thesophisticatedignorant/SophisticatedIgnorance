@@ -88,14 +88,18 @@ function ProductDisplay({ id, product, sectionLogo, reversed = false }) {
     const [quantity, setQuantity] = useState(1)
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
-    const images = product.images || [product.image || "/placeholder.svg", "/placeholder.svg", "/placeholder.svg"]
+    // Fall back to repeating the section icon (product.image) for every slide when a
+    // product has no real photos yet - "/placeholder.svg" doesn't exist as a file, so
+    // using it here produced two broken-image slides alongside one working one.
+    const fallbackImage = product.image || "/placeholder.svg"
+    const images = product.images || [fallbackImage, fallbackImage, fallbackImage]
 
     // Sync image carousel with selected color
     useEffect(() => {
         if (!selectedColor || !images || images.length === 0) return;
         const colorLower = selectedColor.toLowerCase();
-        // Skip placeholder
-        if (images[0] === "/placeholder.svg") return;
+        // Skip when there are no real per-product photos to match against
+        if (!product.images) return;
         
         const firstMatchIndex = images.findIndex(img => typeof img === 'string' && img.toLowerCase().includes(colorLower));
         if (firstMatchIndex !== -1) {

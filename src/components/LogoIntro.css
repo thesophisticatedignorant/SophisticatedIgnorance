@@ -9,7 +9,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: opacity 0.3s ease-out;
+    transition: opacity 0.4s ease-out;
 }
 
 .logo-intro-container.fade-out {
@@ -21,46 +21,54 @@
     width: 83.33%;
     max-width: 800px;
     height: auto;
-    animation: logoIntro 2.5s ease-in-out forwards;
+    animation: logoIntro 1.8s ease-in-out forwards;
 }
 
-/* The animation that shrinks logo and moves it up to header position */
+/* The animation that shrinks logo and moves it up to header position.
+   translateY is listed BEFORE scale - `transform: scale(S) translateY(V)` composes
+   with scale applied last, so the translate's on-screen displacement gets
+   multiplied by the (shrinking) scale factor and collapses toward 0 as the logo
+   gets small, capping the travel distance at a few px instead of the intended
+   distance. Listing translateY first makes it apply in the final, unscaled
+   coordinate space, so the full vh distance is actually traveled. vh (not %,
+   which resolves against the logo's own small height) gives a fixed, predictable
+   travel distance regardless of the logo's own size. */
 @keyframes logoIntro {
     0% {
-        transform: scale(1) translateY(0);
+        transform: translateY(0) scale(1);
         opacity: 1;
     }
 
-    30% {
-        transform: scale(1) translateY(0);
+    35% {
+        transform: translateY(0) scale(1);
         opacity: 1;
     }
 
     100% {
-        transform: scale(0.08) translateY(-500%);
+        transform: translateY(-42vh) scale(0.12);
         opacity: 0;
     }
 }
 
 @media (max-width: 768px) {
     .logo-intro-image {
-        animation: logoIntroMobile 2.5s ease-in-out forwards;
+        animation: logoIntroMobile 1.8s ease-in-out forwards;
     }
 }
 
 @keyframes logoIntroMobile {
     0% {
-        transform: scale(1) translateY(0);
+        transform: translateY(0) scale(1);
         opacity: 1;
     }
 
-    30% {
-        transform: scale(1) translateY(0);
+    35% {
+        transform: translateY(0) scale(1);
         opacity: 1;
     }
 
     100% {
-        transform: scale(0.15) translateY(-1800%);
+        transform: translateY(-38vh) scale(0.18);
         opacity: 0;
     }
 }

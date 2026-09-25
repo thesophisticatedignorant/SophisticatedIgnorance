@@ -1,11 +1,15 @@
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useLayoutEffect, useRef, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGrid } from '../context/GridContext'
 import './CardSlider.css'
 
 function CardSlider({ isActive, onCycleComplete }) {
     const navigate = useNavigate()
-    const [progress, setProgress] = useState(5.4) // Start at FOUNDATIONS (front position)
+    // Progress drives a requestAnimationFrame loop that ticks every frame - it lives in a
+    // ref (not React state) so the animation no longer forces a full React re-render of all
+    // 6 filter/shadow-heavy cards 60+ times a second. Positions are pushed straight to the
+    // DOM via refs in applyFrame() instead. This was the main source of the card-slider lag.
+    const progressRef = useRef(5.4) // Start at FOUNDATIONS (front position)
     const [direction, setDirection] = useState(1)
     const [isPaused, setIsPaused] = useState(false) // Animation enabled
     const { isGridVisible } = useGrid() // Shared state with grid overlay
@@ -18,6 +22,8 @@ function CardSlider({ isActive, onCycleComplete }) {
     const touchStartRef = useRef(null)
     const totalProgressRef = useRef(0)
     const cycleCompletedRef = useRef(false)
+    const cardWrapperRefs = useRef([])
+    const cardContentRefs = useRef([])
 
     // Stable random delays for sheen animation (generated once per mount)
     const sheenDelays = useMemo(() =>
@@ -133,6 +139,41 @@ function CardSlider({ isActive, onCycleComplete }) {
         }
     ]
 
+    // Pushes the current progress straight to each card's DOM node (transform/opacity/
+    // zIndex) without going through React state/render. Called every animation frame
+    // plus after any layout-affecting change (resize, lock toggle).
+    const applyFrame = useCallback(() => {
+        const progress = progressRef.current
+        slides.forEach((_, index) => {
+            const wrapper = cardWrapperRefs.current[index]
+            const content = cardContentRefs.current[index]
+            if (!wrapper) return
+
+            const { scale, zDepth, opacity, position } = getCardPosition(index, progress)
+
+            if (opacity <= 0.01) {
+                wrapper.style.display = 'none'
+                return
+            }
+
+            wrapper.style.display = 'flex'
+            wrapper.style.transform = `translate(-50%, -50%) translateZ(${zDepth}px) scale(${scale})`
+            wrapper.style.opacity = opacity
+            wrapper.style.zIndex = Math.floor(100 - position * 10)
+
+            if (content) {
+                content.style.opacity = opacity
+            }
+        })
+    }, [isMobile])
+
+    // Keep the DOM in sync immediately after mount and after any change that affects
+    // layout (mobile breakpoint) - otherwise cards would sit at their default position
+    // until the next animation frame fires.
+    useLayoutEffect(() => {
+        applyFrame()
+    }, [applyFrame])
+
     useEffect(() => {
         if (isActive && !isPaused) {
             // Reset the time reference when animation starts
@@ -145,7 +186,8 @@ function CardSlider({ isActive, onCycleComplete }) {
                 lastTimeRef.current = now
 
                 const move = delta * 0.0005 * direction
-                setProgress(prev => (prev + move + slides.length) % slides.length)
+                progressRef.current = (progressRef.current + move + slides.length) % slides.length
+                applyFrame()
 
                 // Track cycle progress
                 if (!cycleCompletedRef.current) {
@@ -166,7 +208,7 @@ function CardSlider({ isActive, onCycleComplete }) {
                 cancelAnimationFrame(animationRef.current)
             }
         }
-    }, [isActive, isPaused, direction, slides.length, onCycleComplete])
+    }, [isActive, isPaused, direction, slides.length, onCycleComplete, applyFrame])
 
     const handleTouchStart = (e) => {
         touchStartRef.current = {
@@ -210,7 +252,7 @@ function CardSlider({ isActive, onCycleComplete }) {
         }
     }
 
-    const getCardPosition = (index) => {
+    const getCardPosition = (index, progress) => {
         let position = (index - progress + slides.length) % slides.length
         const normalizedPos = position / slides.length
 
@@ -288,21 +330,18 @@ function CardSlider({ isActive, onCycleComplete }) {
         >
             <div className="cards-container">
                 {slides.map((slide, index) => {
-                    const { scale, zDepth, opacity, position } = getCardPosition(index)
-
-                    if (opacity <= 0.01) return null
-
+                    // transform/opacity/zIndex/backdropFilter are applied imperatively in
+                    // applyFrame() every animation frame (see above) instead of here, so this
+                    // render only runs on real prop/state changes, not on every rAF tick.
                     return (
                         <div
                             key={index}
+                            ref={el => { cardWrapperRefs.current[index] = el }}
                             className="card"
                             style={{
                                 background: cardStyles[index].background,
                                 backgroundBlendMode: cardStyles[index].backgroundBlendMode || 'normal',
                                 boxShadow: cardStyles[index].boxShadow,
-                                transform: `translate(-50%, -50%) translateZ(${zDepth}px) scale(${scale})`,
-                                opacity: opacity,
-                                zIndex: Math.floor(100 - position * 10),
                                 border: cardStyles[index].border || '3px solid rgba(255, 255, 255, 0.3)',
                                 position: 'absolute',
                                 left: '50%',
@@ -319,8 +358,7 @@ function CardSlider({ isActive, onCycleComplete }) {
                                 }}
                             ></div>
                             <div className="drift-container">
-                                <div className="card-content" style={{
-                                    opacity: opacity,
+                                <div className="card-content" ref={el => { cardContentRefs.current[index] = el }} style={{
                                     position: 'relative',
                                     width: '100%',
                                     height: '100%',
@@ -336,7 +374,7 @@ function CardSlider({ isActive, onCycleComplete }) {
                                 onClick={() => {
                                     if (isMobile) {
                                         navigate(slide.link)
-                                    } else if (isLocked && position < 0.5) {
+                                    } else if (isLocked && getCardPosition(index, progressRef.current).position < 0.5) {
                                         navigate(slide.link)
                                     }
                                 }}>

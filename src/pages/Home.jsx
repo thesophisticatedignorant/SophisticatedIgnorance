@@ -5,6 +5,7 @@ import MenuOverlay from '../components/MenuOverlay'
 import ScrollContainer from '../components/ScrollContainer'
 import LogoIntro from '../components/LogoIntro'
 import NewsletterPopup from '../components/NewsletterPopup'
+import PerfOverlay from '../components/Debug/PerfOverlay'
 import './Home.css'
 
 function Home() {
@@ -35,6 +36,7 @@ function Home() {
 
     return (
         <div className="home-page">
+            {import.meta.env.DEV && <PerfOverlay />}
             {/* Marble Background with CSS */}
             <div className="marble-overlay"></div>
 

@@ -98,7 +98,7 @@
     }
 
     .hoc-link {
-        cursor: pointer;
+        cursor: default;
         width: 100%;
         height: 100vh;
         max-width: 100%;
@@ -107,7 +107,11 @@
         overflow: hidden;
         border: none;
 
-        /* Only enable hover effects after animations complete */
+        /* Not clickable until the entrance animation finishes - see hoverEnabled in JS */
+        &.hover-enabled {
+            cursor: pointer;
+        }
+
         &.hover-enabled:hover {
             .hoc-overlay {
                 opacity: 1;

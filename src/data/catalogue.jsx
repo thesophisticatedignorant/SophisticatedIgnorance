@@ -280,6 +280,12 @@ export const sections = [
                 name: 'The Creed',
                 epithet: 'Every strike makes a statement.',
                 price: '1270',
+                images: [
+                    '/Ghost Mannequins/Relics/The Creed/The Creed - Front.png',
+                    '/Ghost Mannequins/Relics/The Creed/The Creed - Over n Under.png',
+                    '/Ghost Mannequins/Relics/The Creed/The Creed - Headgear.png',
+                    '/Ghost Mannequins/Relics/The Creed/The Creed - Groin Protector.png'
+                ],
                 colors: ['Amethyst'],
                 sizes: [
                     { size: '12oz', soldOut: false },

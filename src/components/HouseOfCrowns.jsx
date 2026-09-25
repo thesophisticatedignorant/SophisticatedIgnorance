@@ -118,6 +118,12 @@ function HouseOfCrowns({ number }) {
     const handleEnterHouse = (e) => {
         e.preventDefault()
 
+        // Ignore clicks while the entrance animation is still running - starting the
+        // exit transition on top of it caused window.open() to fire ~1.1s after the
+        // click (inside a gsap onComplete callback), which browsers can treat as no
+        // longer tied to the original user gesture and silently block as a popup.
+        if (!hoverEnabled) return
+
         // Show the gate overlay
         gsap.set(gateRef.current, { display: 'block' })
 
