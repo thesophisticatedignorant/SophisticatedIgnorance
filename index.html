@@ -2,12 +2,158 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Favicon: the King, the Crownworks piece. The wordmark is too wide to read at 16px, and
+         Google showed a blank globe beside the result because the only icon was an SVG of white
+         text on transparent. Google wants a square multiple of 48px, and /favicon.ico is what
+         browsers and older crawlers request when they ignore these links. -->
+    <link rel="icon" href="/favicon.ico?v=2" sizes="any" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png?v=2" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png?v=2" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png?v=2" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Sophisticated Ignorance</title>
+    <meta name="theme-color" content="#000000" />
+
+    <!-- SEO. Until this block the page carried only a title, so search engines and AI overviews
+         described the brand from whatever else shares the name: the Jay-Z lyric, a podcast,
+         @si_life. The copy is the house's own (the Maison Overview on cireconglomerate.com).
+         The chess pieces are spelled out because "clothing brand with a chess piece logo" is how
+         people who have seen the mark but not the name search for it. -->
+    <title>Sophisticated Ignorance | High-Fashion Menswear with the Chess Piece Logo</title>
+    <meta name="description" content="Sophisticated Ignorance is a high-fashion menswear and lifestyle maison, blurring the boundaries between streetwear and refined tailoring. New-Vieux Riche luxury distinguished by its signature chess piece insignia, from Pawn to King, inviting clients to ascend the ranks of distinction. Presented by CIRE Conglomerate." />
+    <link rel="canonical" href="https://sophisticatedignorance.co/" />
+
+    <!-- ?v= forces WhatsApp, iMessage, Instagram and the rest to fetch the card image again
+         instead of reusing a cached one; bump it whenever og-cover.png changes. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sophisticated Ignorance" />
+    <meta property="og:title" content="Sophisticated Ignorance | High-Fashion Menswear" />
+    <meta property="og:description" content="New-Vieux Riche luxury, from Pawn to King. Power Perfected in Position." />
+    <meta property="og:url" content="https://sophisticatedignorance.co/" />
+    <meta property="og:image" content="https://sophisticatedignorance.co/og-cover.png?v=3" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1024" />
+    <meta property="og:image:height" content="1024" />
+    <meta property="og:image:alt" content="Sophisticated Ignorance" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Sophisticated Ignorance | High-Fashion Menswear" />
+    <meta name="twitter:description" content="New-Vieux Riche luxury, from Pawn to King. Power Perfected in Position." />
+    <meta name="twitter:image" content="https://sophisticatedignorance.co/og-cover.png?v=3" />
+
+    <!-- sameAs lists the only account that is ours. It is the signal that separates this
+         brand from @si_life and every other user of the name. The @id values match
+         cireconglomerate.com so the family reads as one. -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://sophisticatedignorance.co/#org",
+          "name": "Sophisticated Ignorance",
+          "alternateName": [
+            "sophisticatedignorance",
+            "sophisticatedignorance.co",
+            "Sophisticated Ignorance clothing"
+          ],
+          "url": "https://sophisticatedignorance.co/",
+          "logo": "https://sophisticatedignorance.co/si-logo.png",
+          "image": "https://sophisticatedignorance.co/og-cover.png",
+          "slogan": "Power Perfected in Position",
+          "description": "Sophisticated Ignorance is a high-fashion menswear and lifestyle maison, blurring the boundaries between streetwear and refined tailoring. New-Vieux Riche luxury distinguished by its signature chess piece insignia, from Pawn to King, inviting clients to ascend the ranks of distinction. Presented by CIRE Conglomerate. Rooted in the ethos of The Architecture of Self, where the trickle-up and trickle-down theories of luxury collide, its six tiers are Pawn (Foundations), Rook (Fortifications), Bishop (Relics), Knight (Dominion), Queen (Adornments) and King (Crownworks).",
+          "knowsAbout": [
+            "Menswear",
+            "Luxury fashion",
+            "Streetwear",
+            "Tailoring",
+            "Leather goods",
+            "Footwear",
+            "Accessories"
+          ],
+          "sameAs": [
+            "https://www.instagram.com/sophisticatedignorance.co"
+          ],
+          "parentOrganization": {
+            "@type": "Organization",
+            "@id": "https://cireconglomerate.com/#org",
+            "name": "CIRE Conglomerate",
+            "url": "https://cireconglomerate.com/",
+            "sameAs": [
+              "https://www.instagram.com/cireconglomerate"
+            ]
+          },
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Sophisticated Ignorance tiers",
+            "itemListElement": [
+              {
+                "@type": "OfferCatalog",
+                "position": 1,
+                "name": "Foundations (Pawn): The Architecture of Self",
+                "description": "Foundations, the Pawn tier of Sophisticated Ignorance: the essentials: the base layer of refinement, designed for structure, comfort and everyday uniformity."
+              },
+              {
+                "@type": "OfferCatalog",
+                "position": 2,
+                "name": "Fortifications (Rook): The Shield of Style",
+                "description": "Fortifications, the Rook tier of Sophisticated Ignorance: defense through design: luxurious garments built as armor."
+              },
+              {
+                "@type": "OfferCatalog",
+                "position": 3,
+                "name": "Relics (Bishop): The Creed of Craft",
+                "description": "Relics, the Bishop tier of Sophisticated Ignorance: timeless leather goods, designed to be carried, aged and remembered."
+              },
+              {
+                "@type": "OfferCatalog",
+                "position": 4,
+                "name": "Dominion (Knight): The Path of Conquest",
+                "description": "Dominion, the Knight tier of Sophisticated Ignorance: footwear engineered for elevation, designed to command every step."
+              },
+              {
+                "@type": "OfferCatalog",
+                "position": 5,
+                "name": "Adornments (Queen): The Reign of Detail",
+                "description": "Adornments, the Queen tier of Sophisticated Ignorance: accessories that command attention without excess."
+              },
+              {
+                "@type": "OfferCatalog",
+                "position": 6,
+                "name": "Crownworks (King): The Pinnacle of Refinement",
+                "description": "Crownworks, the King tier of Sophisticated Ignorance: garments crafted for moments of command, ceremony and consequence."
+              }
+            ]
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://sophisticatedignorance.co/#website",
+          "name": "Sophisticated Ignorance",
+          "url": "https://sophisticatedignorance.co/",
+          "publisher": {
+            "@id": "https://sophisticatedignorance.co/#org"
+          }
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
+    <!-- What a crawler that does not run JavaScript sees; most AI crawlers do not. -->
+    <noscript>
+      <h1>Sophisticated Ignorance</h1>
+      <p><strong>Sophisticated Ignorance</strong> is a high-fashion menswear and lifestyle maison, blurring the boundaries between streetwear and refined tailoring. <em>New-Vieux Riche luxury</em> distinguished by its signature chess piece insignia, from Pawn to King, inviting clients to ascend the ranks of distinction. Presented by <a href="https://cireconglomerate.com/">CIRE Conglomerate</a>, alongside the fine-jewelry maison <a href="https://sophisticatedbrilliance.com/">Sophisticated Brilliance</a> and CIRE Concierge &amp; Hospitality.</p>
+      <ul>
+        <li>01 Foundations (Pawn): The Architecture of Self. The essentials: the base layer of refinement, designed for structure, comfort and everyday uniformity.</li>
+        <li>02 Fortifications (Rook): The Shield of Style. Defense through design: luxurious garments built as armor.</li>
+        <li>03 Relics (Bishop): The Creed of Craft. Timeless leather goods, designed to be carried, aged and remembered.</li>
+        <li>04 Dominion (Knight): The Path of Conquest. Footwear engineered for elevation, designed to command every step.</li>
+        <li>05 Adornments (Queen): The Reign of Detail. Accessories that command attention without excess.</li>
+        <li>06 Crownworks (King): The Pinnacle of Refinement. Garments crafted for moments of command, ceremony and consequence.</li>
+      </ul>
+      <p>Instagram: <a href="https://www.instagram.com/sophisticatedignorance.co">@sophisticatedignorance.co</a> · <a href="https://www.instagram.com/cireconglomerate">@cireconglomerate</a></p>
+    </noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

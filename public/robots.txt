@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /auth
+Disallow: /login
+Disallow: /dashboard
+Disallow: /house-admin
+Disallow: /request-confirmation
+Disallow: /request-review
+
+Sitemap: https://sophisticatedignorance.co/sitemap.xml
