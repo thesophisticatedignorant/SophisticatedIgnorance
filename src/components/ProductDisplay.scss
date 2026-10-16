@@ -125,9 +125,14 @@
                 z-index: 10;
                 box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 
+                // Arrows flank the image on wide desktop, but between 851-1200px the
+                // column gap is too narrow, so they move inside the image as on mobile.
                 &.prev {
                     left: -60px;
                     @media (max-width: 768px) {
+                        left: 10px;
+                    }
+                    @media (min-width: 851px) and (max-width: 1200px) {
                         left: 10px;
                     }
                 }
@@ -135,6 +140,9 @@
                 &.next {
                     right: -60px;
                     @media (max-width: 768px) {
+                        right: 10px;
+                    }
+                    @media (min-width: 851px) and (max-width: 1200px) {
                         right: 10px;
                     }
                 }

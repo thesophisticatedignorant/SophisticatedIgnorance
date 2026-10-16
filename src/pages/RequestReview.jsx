@@ -8,7 +8,7 @@ import './RequestReview.scss';
 import Header from '../components/Header';
 
 function RequestReview() {
-    const { user, loading } = useAuth();
+    const { user, loading, needsEmailVerification } = useAuth();
     const { cartItems, cartCount, clearCart } = useCart();
     const navigate = useNavigate();
     const [submitting, setSubmitting] = useState(false);
@@ -32,13 +32,13 @@ function RequestReview() {
     const total = subtotal + tax;
 
     useEffect(() => {
-        if (!loading && !user) {
+        if (!loading && (!user || needsEmailVerification)) {
             navigate('/auth', { state: { from: { pathname: '/request-review' } } });
         }
-    }, [user, loading, navigate]);
+    }, [user, loading, needsEmailVerification, navigate]);
 
     if (loading) return <div className="loading-screen">Authenticating...</div>;
-    if (!user) return null;
+    if (!user || needsEmailVerification) return null;
 
     const handleSubmit = async () => {
         if (cartItems.length === 0) return;

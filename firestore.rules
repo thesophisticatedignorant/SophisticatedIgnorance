@@ -19,6 +19,13 @@ service cloud.firestore {
       return isAuthenticated() && request.auth.uid == uid;
     }
 
+    // An inquiry's email is how the house contacts the client, so email/password
+    // accounts must have verified it. Google and Apple supply verified emails.
+    function hasVerifiedContact() {
+      return request.auth.token.get('email_verified', false) == true
+        || request.auth.token.firebase.sign_in_provider != 'password';
+    }
+
     // Client profiles. AuthContext reads this, and creates it on first sign-in.
     match /clients/{uid} {
       allow read: if isAdmin() || isSelf(uid);
@@ -41,6 +48,7 @@ service cloud.firestore {
              'remarks', 'socials', 'zipCode', 'taxRate', 'tax', 'subtotal', 'total', 'createdAt'])
         && request.resource.data.userId == request.auth.uid
         && request.resource.data.email == request.auth.token.get('email', null)
+        && hasVerifiedContact()
         && request.resource.data.status == 'Submitted'
         && request.resource.data.items is list
         && request.resource.data.items.size() > 0

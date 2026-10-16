@@ -1,22 +1,67 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './AuthPage.scss';
 
+const getAuthErrorMessage = (error) => {
+    switch (error?.code) {
+        case 'auth/invalid-credential':
+        case 'auth/wrong-password':
+        case 'auth/user-not-found':
+        case 'auth/invalid-login-credentials':
+            return 'Incorrect email or password.';
+        case 'auth/email-already-in-use':
+            return 'An account with this email already exists. Sign in instead.';
+        case 'auth/weak-password':
+            return 'Password must be at least 8 characters.';
+        case 'auth/invalid-email':
+            return 'Enter a valid email address.';
+        case 'auth/too-many-requests':
+            return 'Too many attempts. Please wait a moment and try again.';
+        case 'auth/network-request-failed':
+            return 'Network error. Check your connection and try again.';
+        default:
+            return 'Something went wrong. Please try again.';
+    }
+};
+
 function AuthPage() {
-    const { user, signInWithGoogle, signInWithApple } = useAuth();
+    const {
+        user,
+        needsEmailVerification,
+        signInWithGoogle,
+        signInWithApple,
+        signInWithEmail,
+        signUpWithEmail,
+        resetPassword,
+        resendVerification,
+        refreshVerification,
+        logout
+    } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
+
+    const [mode, setMode] = useState('signin'); // 'signin' | 'signup' | 'reset'
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [submitting, setSubmitting] = useState(false);
+    const [error, setError] = useState('');
+    const [notice, setNotice] = useState('');
+    const [resendDisabled, setResendDisabled] = useState(false);
+    const resendTimer = useRef(null);
+
+    useEffect(() => () => clearTimeout(resendTimer.current), []);
 
     // After login, redirect to where they came from or home
     const from = location.state?.from?.pathname || sessionStorage.getItem('authRedirectPath') || '/';
 
     useEffect(() => {
-        if (user) {
+        if (user && !needsEmailVerification) {
             sessionStorage.removeItem('authRedirectPath');
             navigate(from, { replace: true });
         }
-    }, [user, navigate, from]);
+    }, [user, needsEmailVerification, navigate, from]);
 
     const handleGoogleSignIn = async () => {
         try {
@@ -37,6 +82,119 @@ function AuthPage() {
             alert(`Authentication Error: ${error.message}\nMake sure your domain is added to Firebase Authorized Domains.`);
         }
     };
+
+    const switchMode = (nextMode) => {
+        setMode(nextMode);
+        setError('');
+        setNotice('');
+    };
+
+    const handleEmailSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+        setNotice('');
+
+        if (mode === 'signup' && password.length < 8) {
+            setError(getAuthErrorMessage({ code: 'auth/weak-password' }));
+            return;
+        }
+
+        setSubmitting(true);
+        try {
+            if (mode === 'reset') {
+                await resetPassword(email);
+                setNotice(`If an account exists for ${email.trim()}, a reset link is on its way.`);
+            } else {
+                sessionStorage.setItem('authRedirectPath', from);
+                if (mode === 'signup') {
+                    await signUpWithEmail(name, email, password);
+                } else {
+                    await signInWithEmail(email, password);
+                }
+            }
+        } catch (err) {
+            console.error(err);
+            if (mode === 'reset' && err?.code === 'auth/user-not-found') {
+                setNotice(`If an account exists for ${email.trim()}, a reset link is on its way.`);
+            } else {
+                setError(getAuthErrorMessage(err));
+            }
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    const handleVerified = async () => {
+        setError('');
+        setNotice('');
+        setSubmitting(true);
+        try {
+            const verified = await refreshVerification();
+            if (!verified) {
+                setError("We couldn't confirm verification yet. Check your inbox (and spam folder), then try again.");
+            }
+        } catch (err) {
+            console.error(err);
+            setError(getAuthErrorMessage(err));
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    const handleResend = async () => {
+        setError('');
+        setNotice('');
+        setResendDisabled(true);
+        clearTimeout(resendTimer.current);
+        resendTimer.current = setTimeout(() => setResendDisabled(false), 30000);
+        try {
+            await resendVerification();
+            setNotice('A new link is on its way.');
+        } catch (err) {
+            console.error(err);
+            setError(getAuthErrorMessage(err));
+        }
+    };
+
+    if (user && needsEmailVerification) {
+        return (
+            <div className="auth-page">
+                <div className="auth-container">
+                    <h2>VERIFY YOUR EMAIL</h2>
+                    <p>We sent a verification link to {user.email}. Open it, then return here to continue.</p>
+
+                    <div className="auth-buttons">
+                        <button
+                            type="button"
+                            className="auth-btn primary"
+                            onClick={handleVerified}
+                            disabled={submitting}
+                        >
+                            {submitting ? 'PLEASE WAIT…' : "I'VE VERIFIED — CONTINUE"}
+                        </button>
+                        <button
+                            type="button"
+                            className="auth-btn secondary"
+                            onClick={handleResend}
+                            disabled={resendDisabled}
+                        >
+                            RESEND LINK
+                        </button>
+                    </div>
+
+                    <div className="auth-form">
+                        {error && <p className="auth-error" role="alert">{error}</p>}
+                        {notice && <p className="auth-notice">{notice}</p>}
+                        <div className="auth-links">
+                            <button type="button" className="auth-link" onClick={logout}>
+                                Use a different account
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="auth-page">
@@ -62,6 +220,76 @@ function AuthPage() {
                         Continue with Apple
                     </button>
                 </div>
+
+                <div className="auth-divider"><span>OR</span></div>
+
+                <form className="auth-form" onSubmit={handleEmailSubmit}>
+                    {mode === 'signup' && (
+                        <input
+                            type="text"
+                            placeholder="Full name"
+                            autoComplete="name"
+                            required
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                    )}
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        autoComplete="email"
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    {mode !== 'reset' && (
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
+                            required
+                            minLength={mode === 'signup' ? 8 : undefined}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                    )}
+
+                    {error && <p className="auth-error" role="alert">{error}</p>}
+                    {notice && <p className="auth-notice">{notice}</p>}
+
+                    <button type="submit" className="auth-btn primary" disabled={submitting}>
+                        {submitting
+                            ? 'PLEASE WAIT…'
+                            : mode === 'signup'
+                                ? 'CREATE ACCOUNT'
+                                : mode === 'reset'
+                                    ? 'SEND RESET LINK'
+                                    : 'SIGN IN'}
+                    </button>
+
+                    <div className="auth-links">
+                        {mode === 'signin' && (
+                            <>
+                                <button type="button" className="auth-link" onClick={() => switchMode('reset')}>
+                                    Forgot password?
+                                </button>
+                                <button type="button" className="auth-link" onClick={() => switchMode('signup')}>
+                                    Create an account
+                                </button>
+                            </>
+                        )}
+                        {mode === 'signup' && (
+                            <button type="button" className="auth-link" onClick={() => switchMode('signin')}>
+                                Already have an account? Sign in
+                            </button>
+                        )}
+                        {mode === 'reset' && (
+                            <button type="button" className="auth-link" onClick={() => switchMode('signin')}>
+                                Back to sign in
+                            </button>
+                        )}
+                    </div>
+                </form>
             </div>
         </div>
     );
