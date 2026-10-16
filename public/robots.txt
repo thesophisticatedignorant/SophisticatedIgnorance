@@ -6,5 +6,6 @@ Disallow: /dashboard
 Disallow: /house-admin
 Disallow: /request-confirmation
 Disallow: /request-review
+Disallow: /__/
 
 Sitemap: https://sophisticatedignorance.co/sitemap.xml

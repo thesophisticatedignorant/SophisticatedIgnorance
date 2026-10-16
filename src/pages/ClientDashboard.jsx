@@ -82,7 +82,7 @@ function ClientDashboard() {
                                 </div>
                                 
                                 <div className="req-items">
-                                    {req.items.map((item, i) => (
+                                    {(req.items || []).filter(Boolean).map((item, i) => (
                                         <div key={i} className="req-item-row">
                                             <span>{item.quantity}x {item.title}</span>
                                             <span>${(parseFloat(item.price) * item.quantity).toFixed(2)}</span>

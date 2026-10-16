@@ -95,7 +95,7 @@ function HouseAdmin() {
                                 </div>
                                 
                                 <div className="req-items">
-                                    {req.items.map((item, i) => (
+                                    {(req.items || []).filter(Boolean).map((item, i) => (
                                         <div key={i} className="req-item">
                                             {item.quantity}x {item.title} ({item.size} / {item.color})
                                         </div>

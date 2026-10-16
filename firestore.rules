@@ -1,0 +1,74 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // The house account. email_verified matters: email/password sign-in is
+    // enabled on this project, so without it anyone could register this
+    // address unverified and read every inquiry.
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email == 'cireconglomerate@gmail.com'
+        && request.auth.token.email_verified == true;
+    }
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isSelf(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+
+    // Client profiles. AuthContext reads this, and creates it on first sign-in.
+    match /clients/{uid} {
+      allow read: if isAdmin() || isSelf(uid);
+      allow create: if isSelf(uid)
+        && request.resource.data.keys().hasOnly(['uid', 'email', 'displayName', 'createdAt', 'totalAcquisitions'])
+        && request.resource.data.uid == uid
+        && request.resource.data.totalAcquisitions == 0;
+      allow update, delete: if isAdmin();
+    }
+
+    // Private inquiries. Clients read only their own and can only file them
+    // as themselves, in the initial status. The admin page renders these
+    // fields directly, so they are limited to exactly what RequestReview.jsx
+    // writes, with the types it writes them as - a missing items list or a
+    // string total would otherwise crash the admin page.
+    match /acquisitionRequests/{requestId} {
+      allow read: if isAdmin() || (isAuthenticated() && request.auth.uid == resource.data.userId);
+      allow create: if isAuthenticated()
+        && request.resource.data.keys().hasOnly(['userId', 'email', 'displayName', 'items', 'status',
+             'remarks', 'socials', 'zipCode', 'taxRate', 'tax', 'subtotal', 'total', 'createdAt'])
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.email == request.auth.token.get('email', null)
+        && request.resource.data.status == 'Submitted'
+        && request.resource.data.items is list
+        && request.resource.data.items.size() > 0
+        && request.resource.data.items.size() <= 50
+        && request.resource.data.socials is list
+        && request.resource.data.remarks is string
+        && request.resource.data.zipCode is string
+        && request.resource.data.taxRate is number
+        && request.resource.data.tax is number
+        && request.resource.data.subtotal is number
+        && request.resource.data.total is number;
+      allow update, delete: if isAdmin();
+    }
+
+    // Newsletter. Anyone may subscribe, but only with a plausible email.
+    match /newsletter_subscriptions/{subId} {
+      allow create: if request.resource.data.keys().hasOnly(['email', 'timestamp'])
+        && request.resource.data.email is string
+        && request.resource.data.email.size() <= 254
+        && request.resource.data.email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$');
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /activity/{activityId} {
+      allow create: if isAuthenticated()
+        && request.resource.data.keys().hasOnly(['type', 'userId', 'requestId', 'timestamp', 'details'])
+        && request.resource.data.userId == request.auth.uid;
+      allow read, update, delete: if isAdmin();
+    }
+  }
+}

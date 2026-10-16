@@ -19,18 +19,22 @@ export function AuthProvider({ children }) {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             setUser(currentUser);
             if (currentUser) {
-                // Ensure client document exists in Firestore
-                const userRef = doc(db, 'clients', currentUser.uid);
-                const userSnap = await getDoc(userRef);
-                
-                if (!userSnap.exists()) {
-                    await setDoc(userRef, {
-                        uid: currentUser.uid,
-                        email: currentUser.email,
-                        displayName: currentUser.displayName,
-                        createdAt: serverTimestamp(),
-                        totalAcquisitions: 0
-                    });
+                try {
+                    // Ensure client document exists in Firestore
+                    const userRef = doc(db, 'clients', currentUser.uid);
+                    const userSnap = await getDoc(userRef);
+                    
+                    if (!userSnap.exists()) {
+                        await setDoc(userRef, {
+                            uid: currentUser.uid,
+                            email: currentUser.email,
+                            displayName: currentUser.displayName,
+                            createdAt: serverTimestamp(),
+                            totalAcquisitions: 0
+                        });
+                    }
+                } catch (err) {
+                    console.error('Could not sync client profile:', err);
                 }
             }
             setLoading(false);
