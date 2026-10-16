@@ -309,3 +309,10 @@
         background-position: 200% -200%;
     }
 }
+
+@media (max-width: 768px) {
+    .card { box-shadow: 0 10px 24px rgba(0,0,0,0.6) !important; }
+    .card::after { display: none; }
+    .card-content { opacity: 1; transition: none; }
+    .drift-container { animation: none; }
+}

@@ -16,12 +16,12 @@ export const sections = [
                 price: '30',
                 colors: ['Black', 'Camo'].sort(),
                 images: [
-                    '/Ghost Mannequins/Foundations/The Veil/Black/Black Veil Side.png',
-                    '/Ghost Mannequins/Foundations/The Veil/Black/Black Veil Front.png',
-                    '/Ghost Mannequins/Foundations/The Veil/Black/Black Veil Black.png',
-                    '/Ghost Mannequins/Foundations/The Veil/Camo/Camo Veil Side.png',
-                    '/Ghost Mannequins/Foundations/The Veil/Camo/Camo Veil Front.png',
-                    '/Ghost Mannequins/Foundations/The Veil/Camo/Camo Veil Back.png'
+                    '/Ghost Mannequins/Foundations/The Veil/Black/Black Veil Side.webp',
+                    '/Ghost Mannequins/Foundations/The Veil/Black/Black Veil Front.webp',
+                    '/Ghost Mannequins/Foundations/The Veil/Black/Black Veil Black.webp',
+                    '/Ghost Mannequins/Foundations/The Veil/Camo/Camo Veil Side.webp',
+                    '/Ghost Mannequins/Foundations/The Veil/Camo/Camo Veil Front.webp',
+                    '/Ghost Mannequins/Foundations/The Veil/Camo/Camo Veil Back.webp'
                 ],
                 sizes: [{ size: 'ONE SIZE', soldOut: false }],
                 specs: [
@@ -39,10 +39,10 @@ export const sections = [
                 epithet: 'Simplicity as sophistication.',
                 price: '35',
                 images: [
-                    '/Ghost Mannequins/Foundations/Cornerstone/Cornerstone Black.png?v=2',
-                    '/Ghost Mannequins/Foundations/Cornerstone/Cornerstone Black Closeup.png?v=2',
-                    '/Ghost Mannequins/Foundations/Cornerstone/Cornerstone White.png',
-                    '/Ghost Mannequins/Foundations/Cornerstone/Cornerstone White Closeup.png'
+                    '/Ghost Mannequins/Foundations/Cornerstone/Cornerstone Black.webp',
+                    '/Ghost Mannequins/Foundations/Cornerstone/Cornerstone Black Closeup.webp',
+                    '/Ghost Mannequins/Foundations/Cornerstone/Cornerstone White.webp',
+                    '/Ghost Mannequins/Foundations/Cornerstone/Cornerstone White Closeup.webp'
                 ],
                 sizes: [
                     { size: 'S', soldOut: true },
@@ -65,24 +65,24 @@ export const sections = [
                 epithet: 'Transformation in motion.',
                 price: '180',
                 images: [
-                    '/Ghost Mannequins/Foundations/The Breakaway/Amethyst/Breakaway Amethyst Hoodie Front.png',
-                    '/Ghost Mannequins/Foundations/The Breakaway/Amethyst/Breakaway Amethyst Hoodie Front Zoomed.png',
-                    '/Ghost Mannequins/Foundations/The Breakaway/Amethyst/Breakaway Amethyst Hoodie Back.png',
-                    '/Ghost Mannequins/Foundations/The Breakaway/Amethyst/Breakaway Amethyst Pants Front.png',
-                    '/Ghost Mannequins/Foundations/The Breakaway/Amethyst/Breakaway Amethyst Pants Side.png',
-                    '/Ghost Mannequins/Foundations/The Breakaway/Amethyst/Breakaway Amethyst Pants Back.png',
-                    '/Ghost Mannequins/Foundations/The Breakaway/Grapefruit/Breakaway Grapefruit Hoodie Front.png',
-                    '/Ghost Mannequins/Foundations/The Breakaway/Grapefruit/Breakaway Grapefruit Hoodie Front Zoomed.png',
-                    '/Ghost Mannequins/Foundations/The Breakaway/Grapefruit/Breakaway Grapefruit Hoodie Back.png',
-                    '/Ghost Mannequins/Foundations/The Breakaway/Grapefruit/Breakaway Grapefruit Pants Front.png',
-                    '/Ghost Mannequins/Foundations/The Breakaway/Grapefruit/Breakaway Grapefruit Pants Side.png',
-                    '/Ghost Mannequins/Foundations/The Breakaway/Grapefruit/Breakaway Grapefruit Pants Back.png',
-                    '/Ghost Mannequins/Foundations/The Breakaway/Graphite/Breakaway Graphite Hoodie Front.png',
-                    '/Ghost Mannequins/Foundations/The Breakaway/Graphite/Breakaway Graphite Hoodie Front Zoomed.png',
-                    '/Ghost Mannequins/Foundations/The Breakaway/Graphite/Breakaway Graphite Hoodie Back.png',
-                    '/Ghost Mannequins/Foundations/The Breakaway/Graphite/Breakaway Graphite Pants Front.png',
-                    '/Ghost Mannequins/Foundations/The Breakaway/Graphite/Breakaway Graphite Pants Side.png',
-                    '/Ghost Mannequins/Foundations/The Breakaway/Graphite/Breakaway Graphite Pants Back.png'
+                    '/Ghost Mannequins/Foundations/The Breakaway/Amethyst/Breakaway Amethyst Hoodie Front.webp',
+                    '/Ghost Mannequins/Foundations/The Breakaway/Amethyst/Breakaway Amethyst Hoodie Front Zoomed.webp',
+                    '/Ghost Mannequins/Foundations/The Breakaway/Amethyst/Breakaway Amethyst Hoodie Back.webp',
+                    '/Ghost Mannequins/Foundations/The Breakaway/Amethyst/Breakaway Amethyst Pants Front.webp',
+                    '/Ghost Mannequins/Foundations/The Breakaway/Amethyst/Breakaway Amethyst Pants Side.webp',
+                    '/Ghost Mannequins/Foundations/The Breakaway/Amethyst/Breakaway Amethyst Pants Back.webp',
+                    '/Ghost Mannequins/Foundations/The Breakaway/Grapefruit/Breakaway Grapefruit Hoodie Front.webp',
+                    '/Ghost Mannequins/Foundations/The Breakaway/Grapefruit/Breakaway Grapefruit Hoodie Front Zoomed.webp',
+                    '/Ghost Mannequins/Foundations/The Breakaway/Grapefruit/Breakaway Grapefruit Hoodie Back.webp',
+                    '/Ghost Mannequins/Foundations/The Breakaway/Grapefruit/Breakaway Grapefruit Pants Front.webp',
+                    '/Ghost Mannequins/Foundations/The Breakaway/Grapefruit/Breakaway Grapefruit Pants Side.webp',
+                    '/Ghost Mannequins/Foundations/The Breakaway/Grapefruit/Breakaway Grapefruit Pants Back.webp',
+                    '/Ghost Mannequins/Foundations/The Breakaway/Graphite/Breakaway Graphite Hoodie Front.webp',
+                    '/Ghost Mannequins/Foundations/The Breakaway/Graphite/Breakaway Graphite Hoodie Front Zoomed.webp',
+                    '/Ghost Mannequins/Foundations/The Breakaway/Graphite/Breakaway Graphite Hoodie Back.webp',
+                    '/Ghost Mannequins/Foundations/The Breakaway/Graphite/Breakaway Graphite Pants Front.webp',
+                    '/Ghost Mannequins/Foundations/The Breakaway/Graphite/Breakaway Graphite Pants Side.webp',
+                    '/Ghost Mannequins/Foundations/The Breakaway/Graphite/Breakaway Graphite Pants Back.webp'
                 ],
                 colors: ['Amethyst', 'Grapefruit', 'Graphite'].sort(),
                 breakawaySizing: {
@@ -147,37 +147,37 @@ export const sections = [
                     {
                         is360: true,
                         frames: [
-                            '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Exterior/Contradiction Ext. 1.png',
-                            '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Exterior/Contradiction Ext. 2.png',
-                            '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Exterior/Contradiction Ext. 3.png',
-                            '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Exterior/Contradiction Ext. 4.png',
-                            '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Exterior/Contradiction Ext. 5.png',
-                            '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Exterior/Contradiction Ext. 6.png'
+                            '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Exterior/Contradiction Ext. 1.webp',
+                            '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Exterior/Contradiction Ext. 2.webp',
+                            '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Exterior/Contradiction Ext. 3.webp',
+                            '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Exterior/Contradiction Ext. 4.webp',
+                            '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Exterior/Contradiction Ext. 5.webp',
+                            '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Exterior/Contradiction Ext. 6.webp'
                         ]
                     },
                     {
                         is360: true,
                         frames: [
-                            '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Reverse/Contradiction Rev. 1.png',
-                            '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Reverse/Contradiction Rev. 2.png',
-                            '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Reverse/Contradiction Rev. 3.png',
-                            '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Reverse/Contradiction Rev. 4.png',
-                            '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Reverse/Contradiction Rev. 5.png',
-                            '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Reverse/Contradiction Rev. 6.png'
+                            '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Reverse/Contradiction Rev. 1.webp',
+                            '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Reverse/Contradiction Rev. 2.webp',
+                            '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Reverse/Contradiction Rev. 3.webp',
+                            '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Reverse/Contradiction Rev. 4.webp',
+                            '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Reverse/Contradiction Rev. 5.webp',
+                            '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Reverse/Contradiction Rev. 6.webp'
                         ]
                     },
-                    '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Exterior/Contradiction Ext. 1.png',
-                    '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Exterior/Contradiction Ext. 2.png',
-                    '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Exterior/Contradiction Ext. 3.png',
-                    '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Exterior/Contradiction Ext. 4.png',
-                    '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Exterior/Contradiction Ext. 5.png',
-                    '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Exterior/Contradiction Ext. 6.png',
-                    '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Reverse/Contradiction Rev. 1.png',
-                    '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Reverse/Contradiction Rev. 2.png',
-                    '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Reverse/Contradiction Rev. 3.png',
-                    '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Reverse/Contradiction Rev. 4.png',
-                    '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Reverse/Contradiction Rev. 5.png',
-                    '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Reverse/Contradiction Rev. 6.png'
+                    '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Exterior/Contradiction Ext. 1.webp',
+                    '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Exterior/Contradiction Ext. 2.webp',
+                    '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Exterior/Contradiction Ext. 3.webp',
+                    '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Exterior/Contradiction Ext. 4.webp',
+                    '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Exterior/Contradiction Ext. 5.webp',
+                    '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Exterior/Contradiction Ext. 6.webp',
+                    '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Reverse/Contradiction Rev. 1.webp',
+                    '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Reverse/Contradiction Rev. 2.webp',
+                    '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Reverse/Contradiction Rev. 3.webp',
+                    '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Reverse/Contradiction Rev. 4.webp',
+                    '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Reverse/Contradiction Rev. 5.webp',
+                    '/Ghost Mannequins/Fortifications/The Contradiction/Contradiction Reverse/Contradiction Rev. 6.webp'
                 ],
                 colors: ['Multi'],
                 sizes: [
@@ -222,20 +222,20 @@ export const sections = [
                     {
                         is360: true,
                         frames: [
-                            '/Ghost Mannequins/Fortifications/The Intersect/Intersect 1.png',
-                            '/Ghost Mannequins/Fortifications/The Intersect/Intersect 2.png',
-                            '/Ghost Mannequins/Fortifications/The Intersect/Intersect 3.png',
-                            '/Ghost Mannequins/Fortifications/The Intersect/Intersect 4.png',
-                            '/Ghost Mannequins/Fortifications/The Intersect/Intersect 5.png',
-                            '/Ghost Mannequins/Fortifications/The Intersect/Intersect 6.png'
+                            '/Ghost Mannequins/Fortifications/The Intersect/Intersect 1.webp',
+                            '/Ghost Mannequins/Fortifications/The Intersect/Intersect 2.webp',
+                            '/Ghost Mannequins/Fortifications/The Intersect/Intersect 3.webp',
+                            '/Ghost Mannequins/Fortifications/The Intersect/Intersect 4.webp',
+                            '/Ghost Mannequins/Fortifications/The Intersect/Intersect 5.webp',
+                            '/Ghost Mannequins/Fortifications/The Intersect/Intersect 6.webp'
                         ]
                     },
-                    '/Ghost Mannequins/Fortifications/The Intersect/Intersect 1.png',
-                    '/Ghost Mannequins/Fortifications/The Intersect/Intersect 2.png',
-                    '/Ghost Mannequins/Fortifications/The Intersect/Intersect 3.png',
-                    '/Ghost Mannequins/Fortifications/The Intersect/Intersect 4.png',
-                    '/Ghost Mannequins/Fortifications/The Intersect/Intersect 5.png',
-                    '/Ghost Mannequins/Fortifications/The Intersect/Intersect 6.png'
+                    '/Ghost Mannequins/Fortifications/The Intersect/Intersect 1.webp',
+                    '/Ghost Mannequins/Fortifications/The Intersect/Intersect 2.webp',
+                    '/Ghost Mannequins/Fortifications/The Intersect/Intersect 3.webp',
+                    '/Ghost Mannequins/Fortifications/The Intersect/Intersect 4.webp',
+                    '/Ghost Mannequins/Fortifications/The Intersect/Intersect 5.webp',
+                    '/Ghost Mannequins/Fortifications/The Intersect/Intersect 6.webp'
                 ],
                 sizes: [
                     { size: 'S', soldOut: false },
@@ -281,10 +281,10 @@ export const sections = [
                 epithet: 'Every strike makes a statement.',
                 price: '1270',
                 images: [
-                    '/Ghost Mannequins/Relics/The Creed/The Creed - Front.png',
-                    '/Ghost Mannequins/Relics/The Creed/The Creed - Over n Under.png',
-                    '/Ghost Mannequins/Relics/The Creed/The Creed - Headgear.png',
-                    '/Ghost Mannequins/Relics/The Creed/The Creed - Groin Protector.png'
+                    '/Ghost Mannequins/Relics/The Creed/The Creed - Front.webp',
+                    '/Ghost Mannequins/Relics/The Creed/The Creed - Over n Under.webp',
+                    '/Ghost Mannequins/Relics/The Creed/The Creed - Headgear.webp',
+                    '/Ghost Mannequins/Relics/The Creed/The Creed - Groin Protector.webp'
                 ],
                 colors: ['Amethyst'],
                 sizes: [

@@ -10,7 +10,7 @@ export function CartProvider({ children }) {
     const [cartItems, setCartItems] = useState(() => {
         try {
             const savedCart = localStorage.getItem('cartItems')
-            return savedCart ? JSON.parse(savedCart) : []
+            return savedCart ? JSON.parse(savedCart).map(i => (typeof i.image === 'string' && i.image.startsWith('/Ghost Mannequins/')) ? { ...i, image: i.image.replace(/\.png(\?v=\d+)?$/, '.webp') } : i) : []
         } catch (error) {
             console.error('Failed to load cart from localStorage:', error)
             return []

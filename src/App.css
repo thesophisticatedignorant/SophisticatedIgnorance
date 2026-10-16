@@ -43,7 +43,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url('/black and gold marble.png');
+  background-image: url('/black and gold marble.webp');
   background-size: cover;
   background-position: center;
   mix-blend-mode: normal;
@@ -59,7 +59,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url('/black and gold marble.png');
+  background-image: url('/black and gold marble.webp');
   background-size: cover;
   background-position: center;
   /* Screen blend adds gold highlights without distorting colors */
@@ -131,3 +131,10 @@ body {
 }
 
 /* Gold Specs Layer - REMOVED for clean look */
+@media (max-width: 768px), (hover: none) and (pointer: coarse) {
+  .marble-overlay { inset: -4%; filter: none; will-change: transform; animation: marbleDriftMobile 100s cubic-bezier(.22,.61,.36,1) infinite alternate; }
+  .marble-overlay::before { background-image: url('/marble-mobile-base.webp'); animation: none; }
+  .marble-overlay::after { background-image: url('/marble-mobile-glow.webp'); mix-blend-mode: normal; filter: none; will-change: opacity; animation: metallicGlowMobile 10s cubic-bezier(.22,.61,.36,1) infinite; }
+}
+@keyframes marbleDriftMobile { 0% { transform: translate3d(1.5%,-1.5%,0); } 50% { transform: translate3d(0,0,0); } 100% { transform: translate3d(3%,-3%,0); } }
+@keyframes metallicGlowMobile { 0%,100% { opacity: 0; } 25% { opacity: .55; } 50% { opacity: .25; } 75% { opacity: .6; } }

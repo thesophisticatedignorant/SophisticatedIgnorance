@@ -168,7 +168,7 @@ function HouseOfCrowns({ number }) {
             <div className={`hoc-link ${hoverEnabled ? 'hover-enabled' : ''}`} onClick={handleEnterHouse}>
                 <div className="hoc-image-container" data-scroll data-scroll-speed="-1">
                     <img
-                        src="/Metallic SB Logo.svg"
+                        src="/Metallic SB Logo.webp"
                         alt="Sophisticated Brilliance"
                         className="hoc-logo crown-king"
                         ref={logoRef}

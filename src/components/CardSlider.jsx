@@ -162,7 +162,7 @@ function CardSlider({ isActive, onCycleComplete }) {
             wrapper.style.zIndex = Math.floor(100 - position * 10)
 
             if (content) {
-                content.style.opacity = opacity
+                content.style.opacity = isMobile ? '' : opacity
             }
         })
     }, [isMobile])

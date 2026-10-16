@@ -81,3 +81,7 @@
 .newsletter-submit:hover {
     background: #e5e5e5;
 }
+
+@media (max-width: 768px), (hover: none) and (pointer: coarse) {
+    .newsletter-popup { backdrop-filter: none; -webkit-backdrop-filter: none; background-color: rgba(0,0,0,0.92); }
+}
