@@ -84,6 +84,7 @@ export const sections = [
                     '/Ghost Mannequins/Foundations/The Breakaway/Graphite/Breakaway Graphite Pants Side.webp',
                     '/Ghost Mannequins/Foundations/The Breakaway/Graphite/Breakaway Graphite Pants Back.webp'
                 ],
+                colorwayImages: true,
                 colors: ['Amethyst', 'Grapefruit', 'Graphite'].sort(),
                 breakawaySizing: {
                     hoodieSizes: [

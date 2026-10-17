@@ -234,6 +234,7 @@ function Shop() {
                                         price: product.price,
                                         image: section.image,
                                         images: product.images,
+                                        colorwayImages: product.colorwayImages,
                                         colors: product.colors,
                                         sizes: product.sizes,
                                         specs: product.specs,

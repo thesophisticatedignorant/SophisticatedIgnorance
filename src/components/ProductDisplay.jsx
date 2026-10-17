@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import gsap from 'gsap'
 import { useCart } from '../context/CartContext'
 import './ProductDisplay.scss'
@@ -92,20 +92,36 @@ function ProductDisplay({ id, product, sectionLogo, reversed = false }) {
     // product has no real photos yet - "/placeholder.svg" doesn't exist as a file, so
     // using it here produced two broken-image slides alongside one working one.
     const fallbackImage = product.image || "/placeholder.svg"
-    const images = product.images || [fallbackImage, fallbackImage, fallbackImage]
+    const allImages = useMemo(
+        () => product.images || [fallbackImage, fallbackImage, fallbackImage],
+        [product.images, fallbackImage]
+    )
+    // Products with colorwayImages show only the selected colourway's photos, matched by the "/<Colour>/" folder in the path
+    const images = useMemo(() => {
+        if (!product.colorwayImages || !selectedColor) return allImages
+        const segment = `/${selectedColor.toLowerCase()}/`
+        const subset = allImages.filter(img => typeof img === 'string' && img.toLowerCase().includes(segment))
+        return subset.length ? subset : allImages
+    }, [allImages, product.colorwayImages, selectedColor])
 
     // Sync image carousel with selected color
     useEffect(() => {
         if (!selectedColor || !images || images.length === 0) return;
         const colorLower = selectedColor.toLowerCase();
         // Skip when there are no real per-product photos to match against
-        if (!product.images) return;
+        if (!product.images || product.colorwayImages) return;
         
         const firstMatchIndex = images.findIndex(img => typeof img === 'string' && img.toLowerCase().includes(colorLower));
         if (firstMatchIndex !== -1) {
             setCurrentImageIndex(firstMatchIndex);
         }
     }, [selectedColor, images]);
+
+    // Colourway products keep the same view position when the colour changes (clamped to the new list)
+    useEffect(() => {
+        if (!product.colorwayImages) return
+        setCurrentImageIndex(i => Math.min(i, images.length - 1))
+    }, [product.colorwayImages, images.length, selectedColor])
 
     // GSAP Scroll-triggered animations using Intersection Observer
     useEffect(() => {
